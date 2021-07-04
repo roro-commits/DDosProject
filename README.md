@@ -1,2 +1,0 @@
-# DDosProject
-Final Year Project
