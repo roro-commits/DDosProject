@@ -1,0 +1,6 @@
+# DDosProject
+Final Year Project
+Week 1 - 1/07/2021 - 04/07/2021
+Planning
+installing Libraries and tools 
+Figma Wire Frame Prototyping
