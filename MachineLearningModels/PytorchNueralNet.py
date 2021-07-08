@@ -93,7 +93,7 @@ class Net(nn.Module):
         self.fc2 = nn.Linear(700, 500)
         self.fc3 = nn.Linear(500, 200)
         self.fc4 = nn.Linear(200, 60)
-        self.fc5 = nn.Linear(60, 9)
+        self.fc5 = nn.Linear(60, 10)
 
     def forward(self, x):
         x = F.relu(self.fc1(x))
@@ -107,11 +107,13 @@ class Net(nn.Module):
         return preds.round().squeeze().eq(labels).numpy().sum()
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-print("### GPU", torch.cuda.is_available())
+print("### GPU", device)
 
 X_train = torch.tensor(X_train.values).float()
+X_train = X_train.to(device)
 X_test = torch.tensor(X_test.values).float()
 y_train = torch.tensor(y_train.values).float()
+y_train = y_train.to(device)
 y_test = torch.tensor(y_test.values).float()
 
 
@@ -139,6 +141,8 @@ print(l1[-1])
 net = Net()
 # test = net(i1[98])
 
+net.to(device)
+
 # criterion = nn.MSELoss()
 criterion = nn.CrossEntropyLoss()
 # criterion = nn.BCEWithLogitsLoss()
@@ -157,10 +161,14 @@ for epoch in range(EPOCHS):
     totalCorrect = 0
     for data in train_loader:
         X, y = data
+        X =X.to(device)
+        y = y.to(device)
         # y = y.numpy()
         # y = y.reshape(100,1)
         # y = torch.LongTensor(y)
         net.zero_grad()
+        net = net.to(device)
+
         output = net(X)
         print("###output of testing ",output)
         # print("training output", output[99], "test",y)
@@ -173,20 +181,29 @@ for epoch in range(EPOCHS):
         # loss = criterion
         # print(type(loss))
         # criterion = nn.BCEWithLogitsLoss()
-        loss = criterion(output.squeeze(), y)  # loss functions output - y (target)
+        # y = y.unsqueeze(1)
+        ### The target is converted to Long as catorical values can not be floats for multi class 
+
+
+
+        y = y.type(torch.LongTensor)
+        y = y.to(device)
+
+
+        loss = criterion(output, y)  # loss functions output - y (target)
         print("loosss", loss)
-        loss = loss.type(torch.LongTensor)
+        loss = loss.type(torch.FloatTensor)
         loss.backward()  # back propagation
         optimizer.step()  # adjust weights
 
         totalLoss += loss.item()
         # print("output",output)
-        totalCorrect += net.get_num_correct(output, y)
-        print("Total right for training", totalCorrect)
+        # totalCorrect += net.get_num_correct(output, y)
+        # print("Total right for training", totalCorrect)
     # print(loss)
 
-    PATH = "Final\WebAPP\MlModels\modle.pth"
+    # PATH = "Final\WebAPP\MlModels\modle.pth"
     # saving the model
     # torch.save(net,PATH)
-    torch.save(net.state_dict(), PATH)
+    # torch.save(net.state_dict(), PATH)
     # torch.save(net.state_dict(),PATH)
