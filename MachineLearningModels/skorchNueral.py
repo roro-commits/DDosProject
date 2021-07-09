@@ -5,6 +5,21 @@ import matplotlib.pyplot as plt
 from sklearn import preprocessing as encoder
 from sklearn.preprocessing import MinMaxScaler
 import os
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split, RepeatedStratifiedKFold, cross_val_score
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torchvision
+import torch.optim as optim
+from torch.utils.data import DataLoader, Dataset
+from sklearn.model_selection import GridSearchCV
+
+
+from skorch.callbacks import EpochScoring
+
+from skorch import NeuralNetClassifier
+from skorch import NeuralNetBinaryClassifier
 
 
 
@@ -74,4 +89,84 @@ x_data = intrusion_Data.drop('Attack', axis=1)
 labels = intrusion_Data['Attack']
 
 X_train, X_test, y_train, y_test = train_test_split(x_data, labels, test_size=0.33, random_state=200)
+
+
+
+class Net(nn.Module):
+
+    def __init__(self,
+                 layer_one_units=28,
+                 layer_two_units=17,
+                 layer_three_units=17,
+                 layer_four_units=17,
+                 general_layer_node=17):
+        super(Net, self).__init__()
+        self.layer_one_units = layer_one_units
+        self.layer_two_units = layer_two_units
+        self.layer_three_units = layer_three_units
+        self.layer_four_units = layer_four_units
+        self.general_layer_node = general_layer_node
+
+        self.input_layer = nn.Linear(12, layer_one_units)
+        self.hidden_layer1 = nn.Linear(layer_one_units, layer_two_units)
+        self.hidden_layer2 = nn.Linear(layer_two_units, layer_three_units)
+        self.hidden_layer3 = nn.Linear(general_layer_node, general_layer_node)
+        self.hidden_layer4 = nn.Linear(general_layer_node, general_layer_node)
+        self.hidden_layer5 = nn.Linear(general_layer_node, general_layer_node)
+        self.hidden_layer6 = nn.Linear(general_layer_node, general_layer_node)
+        self.hidden_layer7 = nn.Linear(general_layer_node, general_layer_node)
+        self.hidden_layer8 = nn.Linear(general_layer_node, general_layer_node)
+        self.output_layer = nn.Linear(general_layer_node, 10)
+
+    def forward(self, x):
+        x = F.relu(self.input_layer(x))
+        x = F.relu(self.hidden_layer1(x))
+        x = F.relu(self.hidden_layer2(x))
+        x = F.relu(self.hidden_layer3(x))
+        x = F.relu(self.hidden_layer4(x))
+        x = F.relu(self.hidden_layer5(x))
+        x = F.relu(self.hidden_layer6(x))
+        x = F.relu(self.hidden_layer7(x))
+        x = F.relu(self.hidden_layer8(x))
+        x = torch.sigmoid(self.output_layer(x))
+        return x
+
+    def get_num_correct(self, preds, labels):
+        return preds.round().squeeze().eq(labels).numpy().sum()
+
+
+X_train, X_test, y_train, y_test = train_test_split(x_data, labels, test_size=0.33, random_state=200)
+
+# converting th data type to float for the nueral network
+X_train = X_train.astype(np.float32)
+X_test = X_test.astype(np.float32)
+y_train = y_train.astype(np.longlong)
+y_test = y_test.astype(np.float32)
+
+print("X_train", y_train)
+
+# auc = EpochScoring(scoring='roc_auc', lower_is_better=False)
+
+# skorch.make_binary_classifier(squeeze_output=True)
+
+net = NeuralNetClassifier(
+    Net,
+    max_epochs=120,
+    lr=1,
+    # criterion=nn.BCEWithLogitsLoss,
+    criterion = nn.CrossEntropyLoss,
+    # optimizer=optim.AdamW,
+    optimizer=optim.ASGD,
+    device='cuda'
+)
+
+print("X train values",X_train.values)
+# print("X train values",X_train)
+
+net.fit(X_train.values, y_train.values)
+
+# y_proba = net.predict_proba(X_test[:20].values)
+Accuracy = net.score(X_test.values, y_test.values)
+y_probas = net.predict_proba(X_test.values)
+print("Accuracy",Accuracy)
 
