@@ -157,7 +157,7 @@ net = NeuralNetClassifier(
     criterion = nn.CrossEntropyLoss,
     # optimizer=optim.AdamW,
     optimizer=optim.ASGD,
-    device='cuda'
+    # device='cuda'
 )
 
 print("X train values",X_train.values)
