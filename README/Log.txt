@@ -4,3 +4,13 @@ Week 1 - 1/07/2021 - 04/07/2021
 Planning
 installing Libraries and tools 
 Figma Wire Frame Prototyping
+
+week 2 - 04/07/2021 - 12/07/2021
+
+Data analysis and feature selection 
+data fitting &  training basic fot 
+pytorch Nueral net 
+Random FOrest 
+skorch Nueral network
+
+
