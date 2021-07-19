@@ -14,6 +14,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box'
+import { ResponsiveBullet } from '@nivo/bullet'
 
 
 
@@ -64,8 +65,8 @@ const useStyle = theme => ({
   },
    root: {
       backgroundColor: '#FAFAFA',
-    minWidth: 200,
-     minHeight:300,
+    minWidth: 1750,
+     minHeight:500,
   },
   Win: {
       backgroundColor: '#47ff63',
@@ -95,6 +96,96 @@ minWidth: 200,
     marginBottom: 12,
   },
 });
+
+
+const data = [
+  {
+    "id": "temp.",
+    "ranges": [
+      49,
+      12,
+      84,
+      0,
+      100
+    ],
+    "measures": [
+      42
+    ],
+    "markers": [
+      85
+    ]
+  },
+  {
+    "id": "power",
+    "ranges": [
+      0.31539939331609734,
+      1.0987824311310166,
+      0.09176335669933389,
+      0,
+      2
+    ],
+    "measures": [
+      0.3741108641079165,
+      0.4334573722591677
+    ],
+    "markers": [
+      1.984400183164401
+    ]
+  },
+  {
+    "id": "volume",
+    "ranges": [
+      31,
+      23,
+      3,
+      42,
+      2,
+      37,
+      0,
+      60
+    ],
+    "measures": [
+      25
+    ],
+    "markers": [
+      60
+    ]
+  },
+  {
+    "id": "cost",
+    "ranges": [
+      23615,
+      169752,
+      169775,
+      0,
+      500000
+    ],
+    "measures": [
+      75861,
+      91250
+    ],
+    "markers": [
+      447930
+    ]
+  },
+  {
+    "id": "revenue",
+    "ranges": [
+      10,
+      2,
+      9,
+      0,
+      13
+    ],
+    "measures": [
+      7
+    ],
+    "markers": [
+      8.215632301888252,
+      11.903782911936894
+    ]
+  }
+]
 
 
 
@@ -135,7 +226,10 @@ constructor(props){
 
   }
 
+ 
+   
 
+// Pulls data from the back end and store in React Compnent 
   async getOptions(){
     const res = await axios.get('http://127.0.0.1:5000/static/fighterDataset2.json')
     const data = res.data
@@ -353,7 +447,7 @@ constructor(props){
                       <GridRow spacing={10}>
 
                             <Item xs={12} lg={6}>
-                                <Card  elevation={3} className={this.state.Response? this.state.draw ?  classes.draw : this.state.favWin ? classes.Win: classes.Loss : classes.root}>
+                                <Card  elevation={6} className={this.state.Response? this.state.draw ?  classes.draw : this.state.favWin ? classes.Win: classes.Loss : classes.root}>
                                     <CardActionArea>
                                         <CardActions>
                                             <CardContent>
@@ -369,38 +463,21 @@ constructor(props){
                                         </CardActions>
                                     </CardActionArea>
 
-
-                                    <CardActions>
-                                        <Typography variant="h6" color="textPrimary" component="p">
-                                           Height: {this.state.FighterA[1]}
-                                        </Typography>
-                                    </CardActions>
-
-                                     <CardActions>
-                                        <Typography variant="h6" color="textPrimary" component="p">
-                                           Weight: {this.state.FighterA[2]}
-                                        </Typography>
-                                    </CardActions>
-
-                                    <CardActions>
-                                        <Typography variant="h6" color="textPrimary" component="p">
-                                           Reach: {this.state.FighterA[3]}
-                                        </Typography>
-                                    </CardActions>
-
-                                    <CardActions>
-                                        <Typography variant="h6" color="textPrimary" component="p">
-                                           Stance {this.state.FighterA[4]}
-                                        </Typography>
-                                    </CardActions>
-                                      <CardActions>
-                                        <Typography variant="h6" color="textPrimary" component="p">
-                                           Dob {this.state.FighterA[5]}
-                                        </Typography>
-                                    </CardActions>
+                                   
+                                          <ResponsiveBullet
+                                            data={data}
+                                            margin={{ top: 50, right: 90, bottom: 50, left: 90 }}
+                                            spacing={46}
+                                            titleAlign="start"
+                                            titleOffsetX={-70}
+                                            measureSize={0.2}
+                                          />
+                                  
+                                   
                                 </Card>
                               <GridRow>
-                                  <Item >
+                                
+                              <Item >
                                       <Box p={1.5}>
                                           <Paper  styles={classes.paper}>
 
@@ -410,102 +487,36 @@ constructor(props){
                                               getOptionLabel={(option) => option.Name}
                                               style={{ width: 500 }}
                                               onChange={(event, value) => this.getFighterA(value)} // sends Index of selected Item Fighter A
-                                              renderInput={(params ) => <TextField {...params}  label="Fighters" variant="outlined" />}
+                                              renderInput={(params ) => <TextField {...params}  label="Simulation Quantity" variant="outlined" />}
                                             />
                                         </Paper>
                                       </Box>
+                                       
+                                    <Item   container
+                                      direction="row"
+                                      justify="center"
+                                      alignItems="center">
 
-                                </Item>
+                                        <label htmlFor="contained-button-file">
+                                            <Button size='large' variant="contained" color="primary" onClick={this.postData} component="span" >
+                                                  Simulate
+                                            </Button>
+                                      </label>
+                                          <h1>
+                                              {/*{this.state.Response}*/}
+                                        </h1>
+                                    </Item>
+                              </Item>
+                            
+                            </GridRow>
 
-                              </GridRow>
+                              
                           </Item>
 
-                            <Item xs={12} lg={6}>
-                                <Card  elevation={3} className={this.state.Response1?  this.state.draw ?  classes.draw : this.state.undWin ? classes.Win: classes.Loss : classes.root}>
-                                    <CardActionArea>
-                                        <CardActions>
-                                            <CardContent>
-                                                <Typography variant="h7" component="h1">
-                                                    UnderDog : {this.state.FighterB[0]}
-                                                 </Typography>
-                                                <Typography variant="h2" component="h1">
-                                                    {/*{this.state.Response ? this.state.UnderDog + 'Percent' : '' }*/}
-                                                    {this.state.Response1 ? this.state.draw ? this.state.UnderDog : this.state.UnderDog + 'Percent' : ''}
-                                                 </Typography>
-                                            </CardContent>
-                                        </CardActions>
-                                    </CardActionArea>
+                          
 
 
-                                    <CardActions>
-                                        <Typography variant="h6" color="textPrimary" component="p">
-                                           Height: {this.state.FighterB[1]}
-                                        </Typography>
-                                    </CardActions>
-
-                                     <CardActions>
-                                        <Typography variant="h6" color="textPrimary" component="p">
-                                           Weight: {this.state.FighterB[2]}
-                                        </Typography>
-                                    </CardActions>
-
-                                    <CardActions>
-                                        <Typography variant="h6" color="textPrimary" component="p">
-                                           Reach: {this.state.FighterB[3]}
-                                        </Typography>
-                                    </CardActions>
-
-                                    <CardActions>
-                                        <Typography variant="h6" color="textPrimary" component="p">
-                                           Stance {this.state.FighterB[4]}
-                                        </Typography>
-                                    </CardActions>
-                                      <CardActions>
-                                        <Typography variant="h6" color="textPrimary" component="p">
-                                           Dob {this.state.FighterB[5]}
-                                        </Typography>
-                                    </CardActions>
-                                </Card>
-
-                            <GridRow  justify="flex-end"
-                                alignItems="flex-end" >
-
-                                <Item >
-                                   <Box p={1.5}>
-                                    <Paper styles={classes.paper}>
-                                       <Autocomplete
-                                              id="FighterB"
-                                              options={this.state.selectOptionsNames  }
-                                              getOptionLabel={(option) => option.Name}
-                                              style={{ width: 500 }}
-                                              onChange={(event, value) => this.getFighterB(value)} // sends Index of selected Item Fighter B
-                                              renderInput={(params) => <TextField {...params} label="Fighters" variant="outlined" />}
-                                        />
-                                    </Paper>
-                                   </Box>
-                                </Item>
-
-                          </GridRow>
-                          </Item>
-
-
-                          <GridRow>
-                              <Item   container
-                                direction="row"
-                                justify="center"
-                                alignItems="center">
-
-                                  <label htmlFor="contained-button-file">
-                                      <Button size='large' variant="contained" color="primary" onClick={this.postData} component="span" >
-                                            Predict
-                                      </Button>
-                                </label>
-                                    <h1>
-                                        {/*{this.state.Response}*/}
-                                  </h1>
-                            </Item>
-
-                          </GridRow>
+                        
 
                       </GridRow>
                 </Item>
