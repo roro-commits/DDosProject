@@ -1,8 +1,8 @@
 /* eslint-disable no-use-before-define */
-import React,{useEffect,useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import axios from 'axios'
+import axios from 'axios';
 import FighterData from '../DATA/fighterDataset.json'
 import { Button } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
@@ -13,19 +13,30 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box'
-import { ResponsiveBullet } from '@nivo/bullet'
+import Box from '@material-ui/core/Box';
+import {
+  ComposedChart,
+  Line,
+  Area,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
 
 
 
 
 
-      // abstract Grid
+// abstract Grid
 
-     const Grids = (props) => <Grid container {...props} />
-     const GridCol = (props) => <Grid container direction ='column'{...props} />
-     const GridRow = (props) => <Grid container direction ='row'{...props} />
-     const Item = (props) => <Grid item {...props} />
+const Grids = (props) => <Grid container {...props} />
+const GridCol = (props) => <Grid container direction='column'{...props} />
+const GridRow = (props) => <Grid container direction='row'{...props} />
+const Item = (props) => <Grid item {...props} />
 
 
 
@@ -34,7 +45,7 @@ const useStyle = theme => ({
   toolbarMargin: {
     ...theme.mixins.toolbar,
     marginBottom: "1em",
-    [theme.breakpoints.down("xs")]:{
+    [theme.breakpoints.down("xs")]: {
       marginBottom: "1.5em",
 
     },
@@ -42,48 +53,48 @@ const useStyle = theme => ({
   logo: {
     // height:"100px",
     width: "16em",
-    [theme.breakpoints.down("md")]:{
+    [theme.breakpoints.down("md")]: {
       height: "5em",
       width: "17em",
     },
-    [theme.breakpoints.down("xs")]:{
+    [theme.breakpoints.down("xs")]: {
       height: "5.5em",
       width: "19em",
 
     },
 
   },
-  paper:{
-     display: "flex",
+  paper: {
+    display: "flex",
     flexWrap: "wrap",
     "& > *": {
-       marginTop:theme.spacing(200),
+      marginTop: theme.spacing(200),
       margin: theme.spacing(30),
       width: theme.spacing(300),
       height: theme.spacing(16)
     }
   },
-   root: {
-      backgroundColor: '#FAFAFA',
+  root: {
+    backgroundColor: '#FAFAFA',
     minWidth: 1750,
-     minHeight:500,
+    minHeight: 500,
   },
   Win: {
-      backgroundColor: '#47ff63',
+    backgroundColor: '#47ff63',
     minWidth: 200,
-     minHeight:300,
+    minHeight: 300,
   },
- Loss: {
-  backgroundColor:'#F0A89C',
-minWidth: 200,
- minHeight:300,
-},
-    draw:{
-        backgroundColor: '#F0E79C',
-        minWidth: 200,
-        minHeight:300,
+  Loss: {
+    backgroundColor: '#F0A89C',
+    minWidth: 200,
+    minHeight: 300,
+  },
+  draw: {
+    backgroundColor: '#F0E79C',
+    minWidth: 200,
+    minHeight: 300,
 
-    },
+  },
   bullet: {
     display: 'inline-block',
     margin: '0 2px',
@@ -98,94 +109,7 @@ minWidth: 200,
 });
 
 
-const data = [
-  {
-    "id": "temp.",
-    "ranges": [
-      49,
-      12,
-      84,
-      0,
-      100
-    ],
-    "measures": [
-      42
-    ],
-    "markers": [
-      85
-    ]
-  },
-  {
-    "id": "power",
-    "ranges": [
-      0.31539939331609734,
-      1.0987824311310166,
-      0.09176335669933389,
-      0,
-      2
-    ],
-    "measures": [
-      0.3741108641079165,
-      0.4334573722591677
-    ],
-    "markers": [
-      1.984400183164401
-    ]
-  },
-  {
-    "id": "volume",
-    "ranges": [
-      31,
-      23,
-      3,
-      42,
-      2,
-      37,
-      0,
-      60
-    ],
-    "measures": [
-      25
-    ],
-    "markers": [
-      60
-    ]
-  },
-  {
-    "id": "cost",
-    "ranges": [
-      23615,
-      169752,
-      169775,
-      0,
-      500000
-    ],
-    "measures": [
-      75861,
-      91250
-    ],
-    "markers": [
-      447930
-    ]
-  },
-  {
-    "id": "revenue",
-    "ranges": [
-      10,
-      2,
-      9,
-      0,
-      13
-    ],
-    "measures": [
-      7
-    ],
-    "markers": [
-      8.215632301888252,
-      11.903782911936894
-    ]
-  }
-]
+
 
 
 
@@ -193,32 +117,32 @@ const data = [
 
 
 class ProfessorMMA extends React.Component {
-constructor(props){
+  constructor(props) {
     super(props)
     this.state = {
-      selectOptionsNames : [],
+      selectOptionsNames: [],
       height: [],
-      DOB:[],
-      SApM:[],
-      SLpM:[],
-      REACH:[],
-      STANCE:[],
-      WEIGHT:[],
-      strikeAccuracy:[],
-      strDef:[],
-      tdAcc:[],
-      subAvg:[],
-      tdDef:[],
-      tdAvg:[],
-      FighterA:[],
-      FighterB:[],
-      Response:false,
-      Response1:false,
+      DOB: [],
+      SApM: [],
+      SLpM: [],
+      REACH: [],
+      STANCE: [],
+      WEIGHT: [],
+      strikeAccuracy: [],
+      strDef: [],
+      tdAcc: [],
+      subAvg: [],
+      tdDef: [],
+      tdAvg: [],
+      FighterA: [],
+      FighterB: [],
+      Response: false,
+      Response1: false,
       Favourite: '',
       UnderDog: '',
-      favWin:false,
-      undWin:false,
-      draw:false,
+      favWin: false,
+      undWin: false,
+      draw: false,
     }
     this.getFighterA = this.getFighterA.bind(this);
     this.getFighterB = this.getFighterB.bind(this);
@@ -226,85 +150,85 @@ constructor(props){
 
   }
 
- 
-   
 
-// Pulls data from the back end and store in React Compnent 
-  async getOptions(){
+
+
+  // Pulls data from the back end and store in React Compnent 
+  async getOptions() {
     const res = await axios.get('http://127.0.0.1:5000/static/fighterDataset2.json')
     const data = res.data
-    const nameData =[]
-    const heightData =[]
-    const StrikeAcc =[]
-    const DOB =[]
-    const SApM =[]
-    const SLpM =[]
-    const REACH =[]
-    const STANCE =[]
-    const WEIGHT =[]
-    const strDef =[]
-    const tdAcc =[]
-    const subAvg =[]
-    const tdDef =[]
-    const tdAvg =[]
+    const nameData = []
+    const heightData = []
+    const StrikeAcc = []
+    const DOB = []
+    const SApM = []
+    const SLpM = []
+    const REACH = []
+    const STANCE = []
+    const WEIGHT = []
+    const strDef = []
+    const tdAcc = []
+    const subAvg = []
+    const tdDef = []
+    const tdAvg = []
 
 
-    for(let i =0; i< 6000 ;i++){
+    for (let i = 0; i < 6000; i++) {
       // console.log(FighterData.Name[i])
-      if (FighterData.Name[i] !== undefined){
-        nameData.push({ "Name" : FighterData.Name[i]})
-        heightData.push({"Height": FighterData.HEIGHT[i]})
-        StrikeAcc.push({"StrAcc": FighterData["Str. Acc.."][i]})
-        DOB.push({"DOB":FighterData.DOB[i]})
-        SApM.push({"SApM":FighterData.SApM[i]})
-        SLpM.push({"SLpM":FighterData.SLpM[i]})
-        REACH.push({"REACH":FighterData.REACH[i]})
-        STANCE.push({"STANCE":FighterData.STANCE[i]})
-        WEIGHT.push({"WEIGHT":FighterData.WEIGHT[i]})
-        strDef.push({"strDef":FighterData["Str. Def"][i]})
-        tdAcc.push({"tdAcc":FighterData["TD Acc"][i]})
-        subAvg.push({"subAvg":FighterData["Sub. Avg"][i]})
-        tdDef.push({"tdDef":FighterData["TD Def."][i]})
-        tdAvg.push({"tdAvg":FighterData["TD Avg"][i]})
+      if (FighterData.Name[i] !== undefined) {
+        nameData.push({ "Name": FighterData.Name[i] })
+        heightData.push({ "Height": FighterData.HEIGHT[i] })
+        StrikeAcc.push({ "StrAcc": FighterData["Str. Acc.."][i] })
+        DOB.push({ "DOB": FighterData.DOB[i] })
+        SApM.push({ "SApM": FighterData.SApM[i] })
+        SLpM.push({ "SLpM": FighterData.SLpM[i] })
+        REACH.push({ "REACH": FighterData.REACH[i] })
+        STANCE.push({ "STANCE": FighterData.STANCE[i] })
+        WEIGHT.push({ "WEIGHT": FighterData.WEIGHT[i] })
+        strDef.push({ "strDef": FighterData["Str. Def"][i] })
+        tdAcc.push({ "tdAcc": FighterData["TD Acc"][i] })
+        subAvg.push({ "subAvg": FighterData["Sub. Avg"][i] })
+        tdDef.push({ "tdDef": FighterData["TD Def."][i] })
+        tdAvg.push({ "tdAvg": FighterData["TD Avg"][i] })
 
 
       }
     }
 
-    this.setState({selectOptionsNames: nameData})
-    this.setState({height: heightData})
-    this.setState({strikeAccuracy: StrikeAcc})
-    this.setState({DOB: DOB})
-    this.setState({SLpM: SLpM})
-    this.setState({REACH: REACH})
-    this.setState({STANCE: STANCE})
-    this.setState({WEIGHT: WEIGHT})
-    this.setState({strDef: strDef})
-    this.setState({tdAcc: tdAcc})
-    this.setState({subAvg: subAvg})
-    this.setState({tdDef: tdDef})
-    this.setState({tdAvg: tdAvg})
-    this.setState({SApM: SApM})
+    this.setState({ selectOptionsNames: nameData })
+    this.setState({ height: heightData })
+    this.setState({ strikeAccuracy: StrikeAcc })
+    this.setState({ DOB: DOB })
+    this.setState({ SLpM: SLpM })
+    this.setState({ REACH: REACH })
+    this.setState({ STANCE: STANCE })
+    this.setState({ WEIGHT: WEIGHT })
+    this.setState({ strDef: strDef })
+    this.setState({ tdAcc: tdAcc })
+    this.setState({ subAvg: subAvg })
+    this.setState({ tdDef: tdDef })
+    this.setState({ tdAvg: tdAvg })
+    this.setState({ SApM: SApM })
 
 
 
 
   }
-    componentDidMount(){
-      this.getOptions()
+  componentDidMount() {
+    this.getOptions()
   }
 
-  handleChange(e){
-   this.setState({name:e.label})
+  handleChange(e) {
+    this.setState({ name: e.label })
   }
 
 
-  getFighterA(param){
+  getFighterA(param) {
     const indexA = this.state.selectOptionsNames.indexOf(param);
-    const FighterA=[]
+    const FighterA = []
 
 
-    if(indexA !== -1 ){
+    if (indexA !== -1) {
       // this.setState({FighterA:[]}) // reset array before setting new data
       FighterA.push(this.state.selectOptionsNames[indexA].Name)
       FighterA.push(this.state.height[indexA].Height)
@@ -321,20 +245,20 @@ constructor(props){
       FighterA.push(this.state.tdDef[indexA].tdDef)
       FighterA.push(this.state.subAvg[indexA].subAvg)
     }
-    this.setState({FighterA:FighterA})
-    this.setState({Response:false});
-    this.setState({favWin:false});
-    this.setState({undWin:false});
-    this.setState({draw:false});
+    this.setState({ FighterA: FighterA })
+    this.setState({ Response: false });
+    this.setState({ favWin: false });
+    this.setState({ undWin: false });
+    this.setState({ draw: false });
 
 
 
   }
 
-  getFighterB(param){
+  getFighterB(param) {
     const indexB = this.state.selectOptionsNames.indexOf(param);
-    const FighterB=[]
-    if(indexB!== -1 ){
+    const FighterB = []
+    if (indexB !== -1) {
       // this.setState({FighterB:[]}) // reset array before setting new data
       FighterB.push(this.state.selectOptionsNames[indexB].Name)
       FighterB.push(this.state.height[indexB].Height)
@@ -352,71 +276,71 @@ constructor(props){
       FighterB.push(this.state.subAvg[indexB].subAvg)
 
     }
-    this.setState({FighterB:FighterB});
-    this.setState({Response1:false});
-    this.setState({undWin:''});
-    this.setState({draw:''});
+    this.setState({ FighterB: FighterB });
+    this.setState({ Response1: false });
+    this.setState({ undWin: '' });
+    this.setState({ draw: '' });
 
   }
 
 
-  async postData(){
-  let predictData ;
+  async postData() {
+    let predictData;
 
 
-    if(this.state.FighterA.length > 0 && this.state.FighterB.length > 0){
-        predictData = this.state.FighterA.concat(this.state.FighterB);
+    if (this.state.FighterA.length > 0 && this.state.FighterB.length > 0) {
+      predictData = this.state.FighterA.concat(this.state.FighterB);
     }
 
     const axios = require('axios')
 
-  // axios.post('http://localhost:5000/predict', predictData)
-  //   .then(function (response) {
-  //     console.log(response);
-  //   })
+    // axios.post('http://localhost:5000/predict', predictData)
+    //   .then(function (response) {
+    //     console.log(response);
+    //   })
 
-    const  res = axios({
-          url: '/api/react_api ',
-          method:'POST',
-          data: predictData,
-        // `headers` are custom headers to be sent
-          headers: {'form':'form'},
-      })
-      .then ((response) =>{
+    const res = axios({
+      url: '/api/react_api ',
+      method: 'POST',
+      data: predictData,
+      // `headers` are custom headers to be sent
+      headers: { 'form': 'form' },
+    })
+      .then((response) => {
 
-         // let fighterA = '';
-         // let fighterB = '';
+        // let fighterA = '';
+        // let fighterB = '';
 
         console.log(response.data)
         console.log("File has been sent to the server ")
-        this.setState({Response:true})
-        this.setState({Response1:true})
+        this.setState({ Response: true })
+        this.setState({ Response1: true })
 
 
-        let fighterA =  response.data.FAVOURITE;
+        let fighterA = response.data.FAVOURITE;
         let fighterB = response.data.UNDERDOG;
 
-        if ( fighterA !== 'Draw' && fighterB !== 'Draw'){
-            fighterA =Number(fighterA)
-            fighterB =Number(fighterB)
+        if (fighterA !== 'Draw' && fighterB !== 'Draw') {
+          fighterA = Number(fighterA)
+          fighterB = Number(fighterB)
 
-            if (fighterA > fighterB){
-                this.setState({favWin:true});
-                this.setState({undWin:false});
-            }else {
-                this.setState({undWin:true});
-                this.setState({favWin:false});
-            }
-        }else{
-            this.setState({draw:true})
+          if (fighterA > fighterB) {
+            this.setState({ favWin: true });
+            this.setState({ undWin: false });
+          } else {
+            this.setState({ undWin: true });
+            this.setState({ favWin: false });
+          }
+        } else {
+          this.setState({ draw: true })
         }
 
-        this.setState({Favourite:fighterA})
-        this.setState({UnderDog:fighterB})
+        this.setState({ Favourite: fighterA })
+        this.setState({ UnderDog: fighterB })
 
 
       })
-      .catch(() =>{
+      .catch(() => {
         console.log("internal Server Error")
       });;
 
@@ -429,104 +353,169 @@ constructor(props){
   }
 
 
-     // const Grids = (props) => <Grid container {...props} />
-     // const GridCol = (props) => <Grid container direction ='column'{...props} />
-     // const GridRow = (props) => <Grid container direction ='row'{...props} />
-     // const Item = (props) => <Grid item {...props} />
+  // const Grids = (props) => <Grid container {...props} />
+  // const GridCol = (props) => <Grid container direction ='column'{...props} />
+  // const GridRow = (props) => <Grid container direction ='row'{...props} />
+  // const Item = (props) => <Grid item {...props} />
 
 
-  render(){
-      const { classes } = this.props;
-      const bull = <span className={classes.bullet}>•</span>;
+  render() {
+    const data = [
+      {
+        name: 'Page A',
+        uv: 590,
+        pv: 800,
+        amt: 1400,
+      },
+      {
+        name: 'Page B',
+        uv: 868,
+        pv: 967,
+        amt: 1506,
+      },
+      {
+        name: 'Page C',
+        uv: 1397,
+        pv: 1098,
+        amt: 989,
+      },
+      {
+        name: 'Page D',
+        uv: 1480,
+        pv: 1200,
+        amt: 1228,
+      },
+      {
+        name: 'Page E',
+        uv: 1520,
+        pv: 1108,
+        amt: 1100,
+      },
+      {
+        name: 'Page F',
+        uv: 1400,
+        pv: 680,
+        amt: 1700,
+      },
+    ];
+
+
+
+    const { classes } = this.props;
+    const bull = <span className={classes.bullet}>•</span>;
     return (
 
-    <React.Fragment>
-       <Box p={5}>
-           <GridRow >
-                <Item xs={12}>
-                      <GridRow spacing={10}>
+      <React.Fragment>
+        <Box p={5}>
+          <GridRow >
+            <Item xs={12}>
+              <GridRow spacing={10}>
 
-                            <Item xs={12} lg={6}>
-                                <Card  elevation={6} className={this.state.Response? this.state.draw ?  classes.draw : this.state.favWin ? classes.Win: classes.Loss : classes.root}>
-                                    <CardActionArea>
-                                        <CardActions>
-                                            <CardContent>
-                                                <Typography variant="h7" component="h1">
-                                                    Favourite : {this.state.FighterA[0]}
-                                                 </Typography>
-                                                  <Typography variant="h2" component="h1">
-                                                    {/*{this.state.Response ? this.state.Favourite + 'Percent' : '' }*/}
-                                                   {this.state.Response ? this.state.draw ? this.state.Favourite : this.state.Favourite + 'Percent' : ''}
+                <Item xs={12} lg={6}>
+                  <Card elevation={6} className={this.state.Response ? this.state.draw ? classes.draw : this.state.favWin ? classes.Win : classes.Loss : classes.root}>
+                    <CardActionArea>
+                      <CardActions>
+                        <CardContent>
+                          <Typography variant="h7" component="h1">
+                            Favourite : {this.state.FighterA[0]}
+                          </Typography>
+                          <Typography variant="h2" component="h1">
+                            {/*{this.state.Response ? this.state.Favourite + 'Percent' : '' }*/}
+                            {this.state.Response ? this.state.draw ? this.state.Favourite : this.state.Favourite + 'Percent' : ''}
 
-                                                 </Typography>
-                                            </CardContent>
-                                        </CardActions>
-                                    </CardActionArea>
-
-                                   
-                                          <ResponsiveBullet
-                                            data={data}
-                                            margin={{ top: 50, right: 90, bottom: 50, left: 90 }}
-                                            spacing={46}
-                                            titleAlign="start"
-                                            titleOffsetX={-70}
-                                            measureSize={0.2}
-                                          />
-                                  
-                                   
-                                </Card>
-                              <GridRow>
-                                
-                              <Item >
-                                      <Box p={1.5}>
-                                          <Paper  styles={classes.paper}>
-
-                                             <Autocomplete
-                                              id="FighterA"
-                                              options={this.state.selectOptionsNames}
-                                              getOptionLabel={(option) => option.Name}
-                                              style={{ width: 500 }}
-                                              onChange={(event, value) => this.getFighterA(value)} // sends Index of selected Item Fighter A
-                                              renderInput={(params ) => <TextField {...params}  label="Simulation Quantity" variant="outlined" />}
-                                            />
-                                        </Paper>
-                                      </Box>
-                                       
-                                    <Item   container
-                                      direction="row"
-                                      justify="center"
-                                      alignItems="center">
-
-                                        <label htmlFor="contained-button-file">
-                                            <Button size='large' variant="contained" color="primary" onClick={this.postData} component="span" >
-                                                  Simulate
-                                            </Button>
-                                      </label>
-                                          <h1>
-                                              {/*{this.state.Response}*/}
-                                        </h1>
-                                    </Item>
-                              </Item>
-                            
-                            </GridRow>
-
-                              
+                          </Typography>
+                        </CardContent>
+                        <GridRow justify="center" alignItems="center">
+                          <Item xs={12}>
+                            <ResponsiveContainer width={1200} height={500}>
+                              <ComposedChart
+                                layout="vertical"
+                                width={500}
+                                height={400}
+                                data={data}
+                                margin={{
+                                  top: 20,
+                                  right: 20,
+                                  bottom: 20,
+                                  left: 20,
+                                }}
+                              >
+                                <CartesianGrid stroke="#f5f5f5" />
+                                <XAxis type="number" />
+                                <YAxis dataKey="name" type="category" scale="band" />
+                                <Tooltip />
+                                <Legend />
+                                <Area dataKey="amt" fill="#8884d8" stroke="#8884d8" />
+                                <Bar dataKey="pv" barSize={20} fill="#413ea0" />
+                                <Line dataKey="uv" stroke="#ff7300" />
+                              </ComposedChart>
+                            </ResponsiveContainer>
                           </Item>
+                        </GridRow>
 
-                          
+                      </CardActions>
 
 
-                        
 
-                      </GridRow>
+
+                    </CardActionArea>
+
+
+
+
+                  </Card>
+                  <GridRow>
+
+                    <Item >
+                      <Box p={1.5}>
+                        <Paper styles={classes.paper}>
+
+                          <Autocomplete
+                            id="FighterA"
+                            options={this.state.selectOptionsNames}
+                            getOptionLabel={(option) => option.Name}
+                            style={{ width: 500 }}
+                            onChange={(event, value) => this.getFighterA(value)} // sends Index of selected Item Fighter A
+                            renderInput={(params) => <TextField {...params} label="Simulation Quantity" variant="outlined" />}
+                          />
+                        </Paper>
+                      </Box>
+
+                      <Item container
+                        direction="row"
+                        justify="center"
+                        alignItems="center">
+
+                        <label htmlFor="contained-button-file">
+                          <Button size='large' variant="contained" color="primary" onClick={this.postData} component="span" >
+                            Simulate
+                          </Button>
+                        </label>
+                        <h1>
+                          {/*{this.state.Response}*/}
+                        </h1>
+                      </Item>
+                    </Item>
+
+                  </GridRow>
+
+
                 </Item>
-            </GridRow>
 
-       </Box>
 
-    </React.Fragment>
 
-  );
+
+
+
+              </GridRow>
+            </Item>
+          </GridRow>
+
+        </Box>
+
+      </React.Fragment>
+
+    );
   }
 }
 

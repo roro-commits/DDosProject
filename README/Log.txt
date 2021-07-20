@@ -13,4 +13,7 @@ pytorch Nueral net
 Random FOrest 
 skorch Nueral network
 
+week3 - 12/07/2021 - 20/07/21
+I was only able to work on the React web app  due to time constraint of full time job
+
 
