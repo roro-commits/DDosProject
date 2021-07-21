@@ -101,20 +101,26 @@ class ProfessorMMA extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectOptionsNames: [],
-      height: [],
-      DOB: [],
-      SApM: [],
-      SLpM: [],
-      REACH: [],
-      STANCE: [],
-      WEIGHT: [],
-      strikeAccuracy: [],
-      strDef: [],
-      tdAcc: [],
-      subAvg: [],
-      tdDef: [],
-      tdAvg: [],
+      //Data from Backend
+      data_test:1000,
+      data_test2:[100],
+      IPV4_SRC_ADDR : [],
+      L4_SRC_PORT : [],
+      IPV4_DST_ADDR : [],
+      L4_DST_PORT : [],
+      PROTOCOL : [],
+      L7_PROTO : [],
+      IN_BYTES : [],
+      OUT_BYTES : [],
+      IN_PKTS : [],
+      OUT_PKTS : [],
+      TCP_FLAGS : [],
+      FLOW_DURATION_MILLISECONDS : [200],
+      Label : [],
+      Attack : [],
+      //data for graph 
+      graph:[],
+      //old
       FighterA: [],
       FighterB: [],
       Response: false,
@@ -125,67 +131,105 @@ class ProfessorMMA extends React.Component {
       undWin: false,
       draw: false,
     };
-    this.getFighterA = this.getFighterA.bind(this);
+    // this.getFighterA = this.getFighterA.bind(this);
     this.getFighterB = this.getFighterB.bind(this);
     this.postData = this.postData.bind(this);
+    this.setGraph = this.setGraph.bind(this);
   }
 
   // Pulls data from the back end and store in React Compnent
   async getOptions() {
     const res = await axios.get(
-      "http://127.0.0.1:5000/static/fighterDataset2.json"
+      "http://127.0.0.1:5000/static/csvjson.json"
     );
     const data = res.data;
-    const nameData = [];
-    const heightData = [];
-    const StrikeAcc = [];
-    const DOB = [];
-    const SApM = [];
-    const SLpM = [];
-    const REACH = [];
-    const STANCE = [];
-    const WEIGHT = [];
-    const strDef = [];
-    const tdAcc = [];
-    const subAvg = [];
-    const tdDef = [];
-    const tdAvg = [];
 
-    for (let i = 0; i < 6000; i++) {
-      // console.log(FighterData.Name[i])
-      if (FighterData.Name[i] !== undefined) {
-        nameData.push({ Name: FighterData.Name[i] });
-        heightData.push({ Height: FighterData.HEIGHT[i] });
-        StrikeAcc.push({ StrAcc: FighterData["Str. Acc.."][i] });
-        DOB.push({ DOB: FighterData.DOB[i] });
-        SApM.push({ SApM: FighterData.SApM[i] });
-        SLpM.push({ SLpM: FighterData.SLpM[i] });
-        REACH.push({ REACH: FighterData.REACH[i] });
-        STANCE.push({ STANCE: FighterData.STANCE[i] });
-        WEIGHT.push({ WEIGHT: FighterData.WEIGHT[i] });
-        strDef.push({ strDef: FighterData["Str. Def"][i] });
-        tdAcc.push({ tdAcc: FighterData["TD Acc"][i] });
-        subAvg.push({ subAvg: FighterData["Sub. Avg"][i] });
-        tdDef.push({ tdDef: FighterData["TD Def."][i] });
-        tdAvg.push({ tdAvg: FighterData["TD Avg"][i] });
+    console.log(data);
+
+    const IPV4_SRC_ADDR = [];
+    const L4_SRC_PORT = [];
+    const IPV4_DST_ADDR = [];
+    const L4_DST_PORT = [];
+    const PROTOCOL = [];
+    const L7_PROTO = [];
+    const IN_BYTES = [];
+    const OUT_BYTES = [];
+    const IN_PKTS = [];
+    const OUT_PKTS = [];
+    const TCP_FLAGS = [];
+    const FLOW_DURATION_MILLISECONDS = [];
+    const Label = [];
+    const Attack = [];
+
+    // for (let i = 0; i < 6000; i++) {
+    //   // console.log(FighterData.Name[i])
+    //   if (FighterData.Name[i] !== undefined) {
+    //     nameData.push({ Name: FighterData.Name[i] });
+    //     heightData.push({ Height: FighterData.HEIGHT[i] });
+    //     StrikeAcc.push({ StrAcc: FighterData["Str. Acc.."][i] });
+    //     DOB.push({ DOB: FighterData.DOB[i] });
+    //     SApM.push({ SApM: FighterData.SApM[i] });
+    //     SLpM.push({ SLpM: FighterData.SLpM[i] });
+    //     REACH.push({ REACH: FighterData.REACH[i] });
+    //     STANCE.push({ STANCE: FighterData.STANCE[i] });
+    //     WEIGHT.push({ WEIGHT: FighterData.WEIGHT[i] });
+    //     strDef.push({ strDef: FighterData["Str. Def"][i] });
+    //     tdAcc.push({ tdAcc: FighterData["TD Acc"][i] });
+    //     subAvg.push({ subAvg: FighterData["Sub. Avg"][i] });
+    //     tdDef.push({ tdDef: FighterData["TD Def."][i] });
+    //     tdAvg.push({ tdAvg: FighterData["TD Avg"][i] });
+    //   }
+    // }
+
+    for (let i = 0; i < res.data.length; i++) {
+      console.log(data[i]["IPV4_SRC_ADDR"])
+      if (data[i]["IPV4_SRC_ADDR"] !== undefined) {
+        // IPV4_SRC_ADDR.push(data["IPV4_SRC_ADDR"][i]);
+        IPV4_SRC_ADDR.push({ IPV4_SRC_ADDR:data[i]["IPV4_SRC_ADDR"] });
+        L4_SRC_PORT.push({ L4_SRC_PORT:data[i]["L4_SRC_PORT"] });
+        IPV4_DST_ADDR.push({ IPV4_DST_ADDR:data[i]["IPV4_DST_ADDR"] });
+        L4_DST_PORT.push({ L4_DST_PORT:data[i]["L4_DST_PORT"] });
+        PROTOCOL.push({ PROTOCOL:data[i]["PROTOCOL"] });
+        L7_PROTO.push({ L7_PROTO:data[i]["L7_PROTO"] });
+        IN_BYTES.push({ IN_BYTES:data[i]["IN_BYTES"] });
+        OUT_BYTES.push({ OUT_BYTES:data[i]["OUT_BYTES"] });
+        IN_PKTS.push({ IN_PKTS:data[i]["IN_PKTS"] });
+        OUT_PKTS.push({ OUT_PKTS:data[i]["OUT_PKTS"] });
+        TCP_FLAGS.push({ TCP_FLAGS:data[i]["TCP_FLAGS"] });
+        FLOW_DURATION_MILLISECONDS.push({ FLOW_DURATION_MILLISECONDS:data[i]["FLOW_DURATION_MILLISECONDS"] });
+        Label.push({ Label:data[i]["Label"] });
+        Attack.push({ Attack:data[i]["Attack"] });
+
+        console.log({ L4_SRC_PORT })
+        console.log({ IPV4_SRC_ADDR })
+        console.log({FLOW_DURATION_MILLISECONDS})
+
+
+
       }
+      
+
+      
     }
 
-    this.setState({ selectOptionsNames: nameData });
-    this.setState({ height: heightData });
-    this.setState({ strikeAccuracy: StrikeAcc });
-    this.setState({ DOB: DOB });
-    this.setState({ SLpM: SLpM });
-    this.setState({ REACH: REACH });
-    this.setState({ STANCE: STANCE });
-    this.setState({ WEIGHT: WEIGHT });
-    this.setState({ strDef: strDef });
-    this.setState({ tdAcc: tdAcc });
-    this.setState({ subAvg: subAvg });
-    this.setState({ tdDef: tdDef });
-    this.setState({ tdAvg: tdAvg });
-    this.setState({ SApM: SApM });
+    this.setState({ IPV4_SRC_ADDR: IPV4_SRC_ADDR });
+    this.setState({ L4_SRC_PORT: L4_SRC_PORT });
+    this.setState({ IPV4_DST_ADDR: IPV4_DST_ADDR });
+    this.setState({ L4_DST_PORT: L4_DST_PORT });
+    this.setState({ PROTOCOL: PROTOCOL });
+    this.setState({ L7_PROTO: L7_PROTO });
+    this.setState({ IN_BYTES: IN_BYTES });
+    this.setState({ OUT_BYTES: OUT_BYTES });
+    this.setState({ IN_PKTS: IN_PKTS });
+    this.setState({ OUT_PKTS: OUT_PKTS });
+    this.setState({ TCP_FLAGS: TCP_FLAGS });
+    this.setState({ FLOW_DURATION_MILLISECONDS: FLOW_DURATION_MILLISECONDS });
+    this.setState({ Label: Label });
+    this.setState({ Attack: Attack });
+  
   }
+
+  // pull the data when the compenent loads
   componentDidMount() {
     this.getOptions();
   }
@@ -194,32 +238,48 @@ class ProfessorMMA extends React.Component {
     this.setState({ name: e.label });
   }
 
-  getFighterA(param) {
-    const indexA = this.state.selectOptionsNames.indexOf(param);
-    const FighterA = [];
+  // getFighterA(param) {
+  //   const indexA = this.state.selectOptionsNames.indexOf(param);
+  //   const FighterA = [];
 
-    if (indexA !== -1) {
-      // this.setState({FighterA:[]}) // reset array before setting new data
-      FighterA.push(this.state.selectOptionsNames[indexA].Name);
-      FighterA.push(this.state.height[indexA].Height);
-      FighterA.push(this.state.WEIGHT[indexA].WEIGHT);
-      FighterA.push(this.state.REACH[indexA].REACH);
-      FighterA.push(this.state.STANCE[indexA].STANCE);
-      FighterA.push(this.state.DOB[indexA].DOB);
-      FighterA.push(this.state.SLpM[indexA].SLpM);
-      FighterA.push(this.state.strikeAccuracy[indexA].StrAcc);
-      FighterA.push(this.state.SApM[indexA].SApM);
-      FighterA.push(this.state.strDef[indexA].strDef);
-      FighterA.push(this.state.tdAvg[indexA].tdAvg);
-      FighterA.push(this.state.tdAcc[indexA].tdAcc);
-      FighterA.push(this.state.tdDef[indexA].tdDef);
-      FighterA.push(this.state.subAvg[indexA].subAvg);
-    }
-    this.setState({ FighterA: FighterA });
-    this.setState({ Response: false });
-    this.setState({ favWin: false });
-    this.setState({ undWin: false });
-    this.setState({ draw: false });
+  //   if (indexA !== -1) {
+  //     // this.setState({FighterA:[]}) // reset array before setting new data
+  //     FighterA.push(this.state.selectOptionsNames[indexA].Name);
+  //     FighterA.push(this.state.height[indexA].Height);
+  //     FighterA.push(this.state.WEIGHT[indexA].WEIGHT);
+  //     FighterA.push(this.state.REACH[indexA].REACH);
+  //     FighterA.push(this.state.STANCE[indexA].STANCE);
+  //     FighterA.push(this.state.DOB[indexA].DOB);
+  //     FighterA.push(this.state.SLpM[indexA].SLpM);
+  //     FighterA.push(this.state.strikeAccuracy[indexA].StrAcc);
+  //     FighterA.push(this.state.SApM[indexA].SApM);
+  //     FighterA.push(this.state.strDef[indexA].strDef);
+  //     FighterA.push(this.state.tdAvg[indexA].tdAvg);
+  //     FighterA.push(this.state.tdAcc[indexA].tdAcc);
+  //     FighterA.push(this.state.tdDef[indexA].tdDef);
+  //     FighterA.push(this.state.subAvg[indexA].subAvg);
+  //   }
+  //   this.setState({ FighterA: FighterA });
+  //   this.setState({ Response: false });
+  //   this.setState({ favWin: false });
+  //   this.setState({ undWin: false });
+  //   this.setState({ draw: false });
+  // }
+
+  setGraph() 
+  {
+    const graph = [];
+    graph.push(this.state.FLOW_DURATION_MILLISECONDS[1].FLOW_DURATION_MILLISECONDS);
+    graph.push(this.state.OUT_PKTS[0].OUT_PKTS);
+    graph.push(this.state.IN_PKTS[0].IN_PKTS);
+    graph.push(this.state.OUT_BYTES[0].OUT_BYTES);
+    graph.push(this.state.IN_BYTES[0].IN_BYTES);
+    graph.push(this.state.TCP_FLAGS[0].TCP_FLAGS);
+    graph.push(this.state.L7_PROTO[0].L7_PROTO);
+
+
+    console.log("graph!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+graph)
+    this.setState({graph:graph});
   }
 
   getFighterB(param) {
@@ -317,44 +377,44 @@ class ProfessorMMA extends React.Component {
     const data = [
       {
         name: "FLOW_DURATION",
-        uv: 590,
-        pv: 590,
-        amt: 1400,
+        uv: 300,
+        pv:  this.state.graph[0],
+        amt: this.state.data_test2[0],
       },
       {
         name: "OUT_PKTS",
         uv: 868,
-        pv: 868,
+        pv:  this.state.graph[1],
         amt: 1506,
       },
       {
         name: "IN_PKTS",
         uv: 1397,
-        pv: 1098,
+        pv:  this.state.graph[2],
         amt: 989,
       },
       {
         name: "OUT_BYTES",
         uv: 1480,
-        pv: 1200,
+        pv:  this.state.graph[3],
         amt: 1228,
       },
       {
         name: "IN_BYTES",
         uv: 1480,
-        pv: 1200,
+        pv:  this.state.graph[4],
         amt: 1228,
       },
       {
         name: "TCP_FLAGS",
         uv: 1520,
-        pv: 1108,
+        pv:  this.state.graph[5],
         amt: 1100,
       },
       {
         name: "L7_PROTO",
         uv: 1400,
-        pv: 680,
+        pv:  this.state.graph[6],
         amt: 1700,
       },
     ];
@@ -464,6 +524,16 @@ class ProfessorMMA extends React.Component {
                           >
                             Simulate
                           </Button>
+                          <Button
+                            size="large"
+                            variant="contained"
+                            color="primary"
+                            onClick={this.setGraph}
+                            component="span"
+                          >
+                            Graph test
+                          </Button>
+                          
                         </label>
                         <h1>{/*{this.state.Response}*/}</h1>
                       </Item>
