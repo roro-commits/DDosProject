@@ -118,7 +118,8 @@ class ProfessorMMA extends React.Component {
       FLOW_DURATION_MILLISECONDS : [200],
       Label : [],
       Attack : [],
-      //data for graph 
+      //data for graph and backend
+      simulationData:[],
       graph:[],
       //old
       FighterA: [],
@@ -269,17 +270,46 @@ class ProfessorMMA extends React.Component {
   setGraph() 
   {
     const graph = [];
-    graph.push(this.state.FLOW_DURATION_MILLISECONDS[1].FLOW_DURATION_MILLISECONDS);
-    graph.push(this.state.OUT_PKTS[0].OUT_PKTS);
-    graph.push(this.state.IN_PKTS[0].IN_PKTS);
-    graph.push(this.state.OUT_BYTES[0].OUT_BYTES);
-    graph.push(this.state.IN_BYTES[0].IN_BYTES);
-    graph.push(this.state.TCP_FLAGS[0].TCP_FLAGS);
-    graph.push(this.state.L7_PROTO[0].L7_PROTO);
+    const simulationData=[];
+    const min = 1;
+    const max = 100;
+    let rand = min + Math.random() * (max - min)
+     rand = rand.toFixed();
+    console.log("rand:"+rand);
+    
+    graph.push(this.state.FLOW_DURATION_MILLISECONDS[rand].FLOW_DURATION_MILLISECONDS);
+    graph.push(this.state.OUT_PKTS[rand].OUT_PKTS);
+    graph.push(this.state.IN_PKTS[rand].IN_PKTS);
+    graph.push(this.state.OUT_BYTES[rand].OUT_BYTES);
+    graph.push(this.state.IN_BYTES[rand].IN_BYTES);
+    graph.push(this.state.TCP_FLAGS[rand].TCP_FLAGS);
+    graph.push(this.state.L7_PROTO[rand].L7_PROTO);
 
 
     console.log("graph!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+graph)
     this.setState({graph:graph});
+
+    // ["IPV4_SRC_ADDR","L4_SRC_PORT","IPV4_DST_ADDR","L4_DST_PORT","PROTOCOL","L7_PROTO",
+    //                    "IN_BYTES","OUT_BYTES","IN_PKTS","OUT_PKTS","TCP_FLAGS","FLOW_DURATION_MILLISECONDS"
+    //                     ]
+
+    simulationData.push(this.state.IPV4_SRC_ADDR[rand].IPV4_SRC_ADDR);
+    simulationData.push(this.state.L4_SRC_PORT[rand].L4_SRC_PORT);
+    simulationData.push(this.state.IPV4_DST_ADDR[rand].IPV4_DST_ADDR);
+    simulationData.push(this.state.L4_DST_PORT[rand].L4_DST_PORT);
+    simulationData.push(this.state.PROTOCOL[rand].PROTOCOL);
+    simulationData.push(this.state.L7_PROTO[rand].L7_PROTO);
+    simulationData.push(this.state.IN_BYTES[rand].IN_BYTES);
+    simulationData.push(this.state.OUT_BYTES[rand].OUT_BYTES);
+    simulationData.push(this.state.IN_PKTS[rand].IN_PKTS);
+    simulationData.push(this.state.OUT_PKTS[rand].OUT_PKTS);
+    simulationData.push(this.state.TCP_FLAGS[rand].TCP_FLAGS);
+    simulationData.push(this.state.FLOW_DURATION_MILLISECONDS[rand].FLOW_DURATION_MILLISECONDS);
+
+
+    console.log("Simulation data!!!!!!!!!!"+ simulationData);
+    this.setState({simulationData:simulationData});
+
   }
 
   getFighterB(param) {
@@ -311,9 +341,10 @@ class ProfessorMMA extends React.Component {
   async postData() {
     let predictData;
 
-    if (this.state.FighterA.length > 0 && this.state.FighterB.length > 0) {
-      predictData = this.state.FighterA.concat(this.state.FighterB);
-    }
+    // if (this.state.FighterA.length > 0 && this.state.FighterB.length > 0) {
+    //   predictData = this.state.FighterA.concat(this.state.FighterB);
+    // }
+    predictData = this.state.simulationData;
 
     const axios = require("axios");
 
@@ -377,45 +408,45 @@ class ProfessorMMA extends React.Component {
     const data = [
       {
         name: "FLOW_DURATION",
-        uv: 300,
+        uv: 0,
         pv:  this.state.graph[0],
-        amt: this.state.data_test2[0],
+        amt: this.state.graph[0],
       },
       {
         name: "OUT_PKTS",
-        uv: 868,
+        uv: 0,
         pv:  this.state.graph[1],
-        amt: 1506,
+        amt: this.state.graph[1],
       },
       {
         name: "IN_PKTS",
-        uv: 1397,
+        uv: 0,
         pv:  this.state.graph[2],
-        amt: 989,
+        amt: this.state.graph[2],
       },
       {
         name: "OUT_BYTES",
-        uv: 1480,
+        uv: 0,
         pv:  this.state.graph[3],
-        amt: 1228,
+        amt: this.state.graph[3],
       },
       {
         name: "IN_BYTES",
-        uv: 1480,
+        uv: 0,
         pv:  this.state.graph[4],
-        amt: 1228,
+        amt: this.state.graph[4],
       },
       {
         name: "TCP_FLAGS",
-        uv: 1520,
+        uv: 0,
         pv:  this.state.graph[5],
-        amt: 1100,
+        amt: this.state.graph[5],
       },
       {
         name: "L7_PROTO",
-        uv: 1400,
+        uv: 0,
         pv:  this.state.graph[6],
-        amt: 1700,
+        amt: this.state.graph[6],
       },
     ];
 
