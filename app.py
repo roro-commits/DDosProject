@@ -18,7 +18,7 @@ CORS(app, support_credentials=True)
 @app.route('/', methods=['GET', 'POST'])
 def home():
     print("ccheking2", flush=True)
-    return app.send_static_file('index.html')
+    return ('index.html')
 
 # @app.route("/static/csvjson.json", methods=["GET"])
 # @cross_origin(supports_credentials=True)
