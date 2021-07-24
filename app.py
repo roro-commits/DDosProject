@@ -11,13 +11,13 @@ import numpy as np
 
 
 
-app = Flask(__name__, static_folder='..\\build', static_url_path='/')
+app = Flask(__name__, static_folder='..\\build', static_url_path='')
 CORS(app, support_credentials=True)
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
     print("ccheking2", flush=True)
-    return ('index.html')
+    return app.send_static_file('index.html')
 
 # @app.route("/static/csvjson.json", methods=["GET"])
 # @cross_origin(supports_credentials=True)
