@@ -11,7 +11,7 @@ import numpy as np
 
 
 
-app = Flask(__name__, static_folder='..\\build', static_url_path='')
+app = Flask(__name__, static_folder='..\\build', static_url_path='/')
 CORS(app, support_credentials=True)
 
 @app.route('/', methods=['GET', 'POST'])
@@ -124,4 +124,6 @@ def react_api():
 
 if __name__ == "__main__":
     # app.run(debug=True)
-    app.run()
+    # app.run()
+    app.run(host='0.0.0.0', port=5000)
+

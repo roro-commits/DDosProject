@@ -1,1 +1,1 @@
-web: gunicorn --bind 0.0.0.0:$PORT app:app; collectstatic --no-input;
+web: gunicorn --bind 0.0.0.0:$PORT app:app 
