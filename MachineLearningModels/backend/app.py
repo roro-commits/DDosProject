@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,render_template
 from flask_cors import CORS, cross_origin
 from flask import jsonify
 from flask import request
@@ -11,12 +11,13 @@ import numpy as np
 
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='C:\\Users\\captain-blacc\\Documents\\FYP-Project\\DDosProject\MachineLearningModels\\backend\\build', static_url_path='')
 CORS(app, support_credentials=True)
 
-@app.route('/')
-def hello():
-    return 'Hello, World!'
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    print("ccheking2", flush=True)
+    return app.send_static_file('index.html')
 
 # @app.route("/static/csvjson.json", methods=["GET"])
 # @cross_origin(supports_credentials=True)
@@ -27,6 +28,11 @@ def hello():
 #     # Enable Access-Control-Allow-Origin
 #     response.headers.add("Access-Control-Allow-Origin", "*")
 #     return response
+
+# catching React Router urls 
+@app.errorhandler(404)   
+def not_found(e):   
+  return app.send_static_file('index.html')
 
 
 @app.route('/api/react_api', methods=['POST'])
@@ -84,7 +90,8 @@ def react_api():
 
             intrusion_Data['IPV4_SRC_ADDR'] = encoder.LabelEncoder().fit_transform(intrusion_Data['IPV4_SRC_ADDR'])
             intrusion_Data['IPV4_DST_ADDR'] = encoder.LabelEncoder().fit_transform(intrusion_Data['IPV4_DST_ADDR'])
-
+            
+            #Check data before normalization
             # print ("Data check !!!!\n",intrusion_Data.iloc[-1])
             # print ("Data check !!!!\n",intrusion_Data.iloc[1])
 
