@@ -1,4 +1,4 @@
-from flask import Flask,render_template,send_from_directory
+from flask import Flask,render_template,send_from_directory,render_template
 from flask_cors import CORS, cross_origin
 from flask import jsonify
 from flask import request
@@ -18,7 +18,7 @@ CORS(app, support_credentials=True)
 @app.route('/', methods=['GET', 'POST'])
 def home():
     print("ccheking2", flush=True)
-    return ('index.html')
+    return render_template('index.html')
 
 # @app.route("/static/csvjson.json", methods=["GET"])
 # @cross_origin(supports_credentials=True)
