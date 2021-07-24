@@ -1,0 +1,8 @@
+Flask==1.1.2
+Werkzeug==1.0.1
+flask-cors==3.0.9
+sklearn-evaluation==0.5.6 
+scikit-learn==0.24.1
+pandas==1.2.5
+matplotlib==3.3.4
+numpy==1.20.1
