@@ -7,6 +7,7 @@ from sklearn import preprocessing as encoder
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
 
 
@@ -125,5 +126,5 @@ def react_api():
 if __name__ == "__main__":
     # app.run(debug=True)
     # app.run()
-    app.run(host='0.0.0.0', port=5000)
+     app.run(host='0.0.0.0', debug=False, port=os.environ.get('PORT', 80))
 
