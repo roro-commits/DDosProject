@@ -15,10 +15,16 @@ import os
 app = Flask(__name__, static_folder='.\\build',template_folder='..\\build', static_url_path='/')
 CORS(app, support_credentials=True)
 
-@app.route('/', methods=['GET', 'POST'])
-def home():
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    return app.send_static_file('index.html')
 
-  return send_from_directory('..\\build',"index.html")
+
+# @app.route('/', methods=['GET', 'POST'])
+# def home():
+
+#   return send_from_directory('..\\build',"index.html")
   # return("ss")
 
 # @app.route("/static/csvjson.json", methods=["GET"])
@@ -126,7 +132,7 @@ def react_api():
 
 if __name__ == "__main__":
     # app.run(debug=True)
-    # app.run()
-     app.run(host='0.0.0.0', debug=False, port=os.environ.get('PORT'))
+    app.run()
+    #  app.run(host='0.0.0.0', debug=False, port=os.environ.get('PORT'))
 
 
