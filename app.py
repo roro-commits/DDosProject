@@ -34,7 +34,7 @@ def home():
 # catching React Router urls 
 @app.errorhandler(404)   
 def not_found(e):   
-  return app.send_static_file('index.html')
+  return  send_from_directory('..\\build',"index.html")
 
 
 @app.route('/api/react_api', methods=['POST'])
