@@ -12,7 +12,7 @@ import os
 
 
 
-app = Flask(__name__, static_folder='.\\build',template_folder='..\\build', static_url_path='/')
+app = Flask(__name__, static_folder=os.path.abspath("..//build"),template_folder='..\\build', static_url_path='/')
 CORS(app, support_credentials=True)
 
 @app.route('/', defaults={'path': ''})
@@ -40,7 +40,7 @@ def catch_all(path):
 # catching React Router urls 
 @app.errorhandler(404)   
 def not_found(e):   
-  return  send_from_directory('..\\build',"index.html")
+    return app.send_static_file('index.html')
 
 
 @app.route('/api/react_api', methods=['POST'])
