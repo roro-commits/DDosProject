@@ -1,4 +1,4 @@
-from flask import Flask,render_template,send_from_directory,render_template
+from flask import Flask,render_template,render_template
 from flask_cors import CORS, cross_origin
 from flask import jsonify
 from flask import request
@@ -38,9 +38,9 @@ def catch_all(path):
 #     return response
 
 # catching React Router urls 
-@app.errorhandler(404)   
-def not_found(e):   
-    return app.send_static_file('index.html')
+# @app.errorhandler(404)   
+# def not_found(e):   
+#     return app.send_static_file('index.html')
 
 
 @app.route('/api/react_api', methods=['POST'])
