@@ -1,4 +1,4 @@
-from flask import Flask,render_template,render_template,send_from_directory
+from flask import Flask,render_template,send_from_directory,render_template
 from flask_cors import CORS, cross_origin
 from flask import jsonify
 from flask import request
@@ -12,20 +12,13 @@ import os
 
 
 
-app = Flask(__name__, static_folder=os.path.abspath("../build"),template_folder='..\build', static_url_path='')
+app = Flask(__name__, static_folder='./app/build',template_folder='..\\build', static_url_path='/')
 CORS(app, support_credentials=True)
-
-# @app.route('/', defaults={'path': ''})
-# @app.route('/<path:path>')
-# def catch_all(path):
-#     return app.send_static_file('index.html')
-
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-
-  return send_from_directory('..\\build',"index.html")
-  # return("ss")
+    print("ccheking2", flush=True)
+    return send_from_directory(app.static_folder, "index.html")
 
 # @app.route("/static/csvjson.json", methods=["GET"])
 # @cross_origin(supports_credentials=True)
@@ -40,7 +33,7 @@ def home():
 # catching React Router urls 
 # @app.errorhandler(404)   
 # def not_found(e):   
-#     return app.send_static_file('index.html')
+#   return app.send_static_file('index.html')
 
 
 @app.route('/api/react_api', methods=['POST'])
