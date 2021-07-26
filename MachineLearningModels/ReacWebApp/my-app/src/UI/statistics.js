@@ -111,10 +111,6 @@ minWidth: 200,
 });
 
 
-
-
-
-
 class Statistics extends React.PureComponent {
 constructor(props){
     super(props)
@@ -209,9 +205,6 @@ constructor(props){
     this.setState({tdDef: tdDef})
     this.setState({tdAvg: tdAvg})
     this.setState({SApM: SApM})
-
-
-
 
   }
     componentDidMount(){

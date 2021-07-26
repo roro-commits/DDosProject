@@ -145,7 +145,7 @@ class ProfessorMMA extends React.Component {
     );
     const data = res.data;
 
-    console.log(data);
+    console.log(data.FLOW_DURATION_MILLISECONDS);
 
     const IPV4_SRC_ADDR = [];
     const L4_SRC_PORT = [];
