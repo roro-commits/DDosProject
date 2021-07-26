@@ -12,7 +12,7 @@ import os
 
 
 
-app = Flask(__name__, static_folder=os.path.abspath("..//build"),template_folder='..\\build', static_url_path='')
+app = Flask(__name__, static_folder=os.path.abspath("../build"),template_folder='..\build', static_url_path='')
 CORS(app, support_credentials=True)
 
 # @app.route('/', defaults={'path': ''})
