@@ -16,4 +16,14 @@ skorch Nueral network
 week3 - 12/07/2021 - 20/07/21
 I was only able to work on the React web app  due to time constraint of full time job
 
+week4 20/07/21 - 26/07/20201
+fetching data from Flask back-end to react front end parsing the data and filling the graph
+Resolved the CORS problem preventing the react and flask communication 
+Posting data from react to flask 
+preparation for flask app deploymeny to heroku 
+mutliple attempt to deploy  successful deploy but with internal server error
+fixed deploy (bug/error).
+post deploy bugs diagnosing 
+
+
 
