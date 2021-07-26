@@ -141,7 +141,7 @@ class ProfessorMMA extends React.Component {
   // Pulls data from the back end and store in React Compnent
   async getOptions() {
     const res = await axios.get(
-      "http://127.0.0.1:5000/static/csvjson.json"
+      "/static/csvjson.json"
     );
     const data = res.data;
 
@@ -354,7 +354,7 @@ class ProfessorMMA extends React.Component {
     //   })
 
     const res = axios({
-      url: "/api/react_api ",
+      url: "/api/react_api",
       method: "POST",
       data: predictData,
       // `headers` are custom headers to be sent

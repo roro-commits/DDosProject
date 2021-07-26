@@ -155,7 +155,7 @@ constructor(props){
 
 
   async getOptions(){
-    const res = await axios.get('http://127.0.0.1:5000/static/fighterDataset2.json')
+    const res = await axios.get('/static/fighterDataset2.json')
     const data = res.data
     const nameData =[]
     const heightData =[]
