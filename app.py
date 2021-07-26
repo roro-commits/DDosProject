@@ -61,7 +61,7 @@ def react_api():
             print("Datasets 3", dataset[1], flush=True)
             print("Datasets 4", dataset[2], flush=True)
 
-            intrusion_Data = pd.read_csv('/app/build/NF-ToN-IoT.csv')
+            intrusion_Data = pd.read_csv('/app/build/static/NF-ToN-IoT.csv')
             value =intrusion_Data[intrusion_Data.columns[0]].count()
 
             intrusion_Data = intrusion_Data.dropna()
