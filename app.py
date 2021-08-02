@@ -8,12 +8,19 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+import pickle
 
 
 
 
-app = Flask(__name__, static_folder='/app/build',template_folder='/app/build', static_url_path='/')
+# app = Flask(__name__, static_folder='/app/build',template_folder='/app/build', static_url_path='/')
+# CORS(app, support_credentials=True)
+app = Flask(__name__, static_folder='C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\build',template_folder='C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\build', static_url_path='/')
 CORS(app, support_credentials=True)
+
+
+randModel = pickle.load(open('C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\RandModel.pkl', 'rb'))
+
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -61,7 +68,9 @@ def react_api():
             print("Datasets 3", dataset[1], flush=True)
             print("Datasets 4", dataset[2], flush=True)
 
-            intrusion_Data = pd.read_csv('/app/build/static/basic_data.csv')
+            # intrusion_Data = pd.read_csv('/app/build/static/basic_data.csv')
+            intrusion_Data = pd.read_csv('C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\MachineLearningModels\\NF-ToN-IoT.csv')
+
             value =intrusion_Data[intrusion_Data.columns[0]].count()
 
             intrusion_Data = intrusion_Data.dropna()
@@ -115,10 +124,14 @@ def react_api():
             toPredict = np.asarray(intrusion_Data.iloc[-1]).reshape(1, -1)
 
             print("Data for Prediction", toPredict)
+
+             ## Random \Forest prediction
+            prediction = randModel.predict_proba(toPredict)
+            print("Output",prediction)
             
 
 
-        return "Post Data"
+        return prediction
 
 
 

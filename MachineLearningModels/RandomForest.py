@@ -119,6 +119,11 @@ plt.show()
 plot.confusion_matrix(y_test, prediction.round())
 plt.show()
 
+DataStore.dump(rfc, open('RandModel.pkl', 'wb'))
+
+print(DataStore.format_version)
+
+
 
 
 
