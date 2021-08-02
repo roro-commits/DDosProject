@@ -63,7 +63,6 @@ def react_api():
 
             dataset = lambda x: list(x.split(","))
             dataset = dataset(data)   
-
             print("Datasets", dataset, flush=True)
             print("Datasets 2", dataset[0], flush=True)
             print("Datasets 3", dataset[1], flush=True)
