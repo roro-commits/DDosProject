@@ -129,7 +129,7 @@ def react_api():
 
              ## Random \Forest prediction
             prediction = randModel.predict_proba(toPredict)
-            print("Output",prediction)
+            print("Output",prediction[0])
             
 
 
