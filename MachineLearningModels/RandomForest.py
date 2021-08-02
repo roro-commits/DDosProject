@@ -106,6 +106,9 @@ os.system('dot -Tpng tree.dot -o RandomForest.png')
 
 # predictions
 prediction = rfc.predict(X_test)
+print("lenght of x text ````````",len(x_data.loc[0]))
+print("lenght of x text ````````",x_data.loc[1])
+
 
 print("=== Accuracy Score ===")
 

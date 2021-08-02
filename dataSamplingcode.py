@@ -71,7 +71,7 @@ def selectKItems(stream, n, k):
         print("sample DATA ")
         print("sample size:",len(sample))
         print(sample.head(100))
-        sample.to_csv("sampled_data.csv",encoding='utf-8',index=True)
+        sample.to_csv("sampled_data.csv",encoding='utf-8',index=False)
         
         intrusion_Data = pd.read_csv('C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\sampled_data.csv')
         value =intrusion_Data[intrusion_Data.columns[0]].count()

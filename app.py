@@ -70,7 +70,7 @@ def react_api():
             print("Datasets 4", dataset[2], flush=True)
 
             # intrusion_Data = pd.read_csv('/app/build/static/basic_data.csv')
-            # intrusion_Data = pd.read_csv('C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\MachineLearningModels\\NF-ToN-IoT.csv')
+            # intrusion_Data = pd.read_csv('C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\MachineLearningModels\\basic_data.csv')
             intrusion_Data = pd.read_csv('/app/build/mlModel/sampled_data.csv')
 
 
@@ -126,7 +126,7 @@ def react_api():
             #################### Prediction Data #################
             toPredict = np.asarray(intrusion_Data.iloc[-1]).reshape(1, -1)
 
-            print("Data for Prediction", toPredict)
+            print("Data for Prediction¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬", toPredict,"Lenghth",len(toPredict[0]))
 
              ## Random \Forest prediction
             prediction = randModel.predict_proba(toPredict)
@@ -134,7 +134,7 @@ def react_api():
             
 
 
-        return prediction
+        return str(prediction)
 
 
 
