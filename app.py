@@ -70,7 +70,9 @@ def react_api():
             print("Datasets 4", dataset[2], flush=True)
 
             # intrusion_Data = pd.read_csv('/app/build/static/basic_data.csv')
-            intrusion_Data = pd.read_csv('C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\MachineLearningModels\\NF-ToN-IoT.csv')
+            # intrusion_Data = pd.read_csv('C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\MachineLearningModels\\NF-ToN-IoT.csv')
+            intrusion_Data = pd.read_csv('/app/build/mlModel/sampled_data.csv')
+
 
             value =intrusion_Data[intrusion_Data.columns[0]].count()
 
