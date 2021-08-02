@@ -13,13 +13,14 @@ import pickle
 
 
 
-# app = Flask(__name__, static_folder='/app/build',template_folder='/app/build', static_url_path='/')
-# CORS(app, support_credentials=True)
-app = Flask(__name__, static_folder='C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\build',template_folder='C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\build', static_url_path='/')
+app = Flask(__name__, static_folder='/app/build',template_folder='/app/build', static_url_path='/')
 CORS(app, support_credentials=True)
+# app = Flask(__name__, static_folder='C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\build',template_folder='C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\build', static_url_path='/')
+# CORS(app, support_credentials=True)
 
 
-randModel = pickle.load(open('C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\RandModel.pkl', 'rb'))
+# randModel = pickle.load(open('C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\build\mlModel\RandModel.pkl', 'rb'))
+randModel = pickle.load(open('/app/build/mlModel/RandModel.pkl', 'rb'))
 
 
 @app.route('/', methods=['GET', 'POST'])
