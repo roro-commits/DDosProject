@@ -25,5 +25,13 @@ mutliple attempt to deploy  successful deploy but with internal server error
 fixed deploy (bug/error).
 post deploy bugs diagnosing 
 
+week 4 - 20/07/21 - 04/08/21
+This week I solved the problem of my dataset bbeing too big and causing issues during deployment 
+such as saved models files of Machine Learning (ML) being too big for git commits and the back end server timing out duting deplyoment due to large dataset processing 
+
+used Reservoir sampling alogrithmn to sample my dataset
+successfully deployed the Random Forest Model
+
+
 
 
