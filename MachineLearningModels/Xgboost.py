@@ -19,7 +19,9 @@ from xgboost import plot_tree
 
 
 
-intrusion_Data = pd.read_csv('C:\\Users\\captain-blacc\\Documents\\FYP-Project\\DDosProject\\MachineLearningModels\\NF-ToN-IoT.csv')
+# intrusion_Data = pd.read_csv('C:\\Users\\captain-blacc\\Documents\\FYP-Project\\DDosProject\\MachineLearningModels\\NF-ToN-IoT.csv')
+intrusion_Data = pd.read_csv('C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\sampled_data.csv')
+
 value =intrusion_Data[intrusion_Data.columns[0]].count()
 
 intrusion_Data = intrusion_Data.dropna()

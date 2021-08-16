@@ -9,18 +9,35 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import pickle
+from skorch import NeuralNetBinaryClassifier
+from Net_structure import Net as SkorchNet
 
 
 
 
-app = Flask(__name__, static_folder='/app/build',template_folder='/app/build', static_url_path='/')
-CORS(app, support_credentials=True)
-# app = Flask(__name__, static_folder='C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\build',template_folder='C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\build', static_url_path='/')
+
+# app = Flask(__name__, static_folder='/app/build',template_folder='/app/build', static_url_path='/')
 # CORS(app, support_credentials=True)
+app = Flask(__name__, static_folder='C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\build',template_folder='C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\build', static_url_path='/')
+CORS(app, support_credentials=True)
 
 
-# randModel = pickle.load(open('C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\build\mlModel\RandModel.pkl', 'rb'))
-randModel = pickle.load(open('/app/build/mlModel/RandModel.pkl', 'rb'))
+randModel = pickle.load(open('C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\build\mlModel\RandModel.pkl', 'rb'))
+# randModel = pickle.load(open('/app/build/mlModel/RandModel.pkl', 'rb'))
+
+##loading skorch model
+
+SkorchModel = NeuralNetBinaryClassifier(
+    SkorchNet,
+    # max_epochs=120,
+    # lr=0.001,
+    # criterion=nn.BCEWithLogitsLoss,
+    # optimizer=optim.AdamW,
+).initialize()
+
+# SkorchModel.load_params('Skorchmymodel.pkl')
+SkorchModel.load_params(f_params= r'C:\Users\captain-blacc\Documents\FYP-Project\DDosProject\build\mlModel\Skorchmymodel.pkl')
+
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -70,7 +87,9 @@ def react_api():
 
             # intrusion_Data = pd.read_csv('/app/build/static/basic_data.csv')
             # intrusion_Data = pd.read_csv('C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\MachineLearningModels\\basic_data.csv')
-            intrusion_Data = pd.read_csv('/app/build/mlModel/sampled_data.csv')
+            intrusion_Data = pd.read_csv(r'C:\Users\captain-blacc\Documents\FYP-Project\DDosProject\build\mlModel\sampled_data.csv')
+
+            # intrusion_Data = pd.read_csv('/app/build/mlModel/sampled_data.csv')
 
 
             value =intrusion_Data[intrusion_Data.columns[0]].count()
@@ -124,12 +143,24 @@ def react_api():
 
             #################### Prediction Data #################
             toPredict = np.asarray(intrusion_Data.iloc[-1]).reshape(1, -1)
+            toPredict_skorch = np.asarray(intrusion_Data.iloc[-1])
 
             print("Data for Prediction¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬", toPredict,"Lenghth",len(toPredict[0]))
 
              ## Random \Forest prediction
-            prediction = randModel.predict_proba(toPredict)
-            print("Output",prediction[0])
+            prediction = randModel.predict(toPredict)
+
+            skorchData = toPredict_skorch.astype(np.float32)
+            print("Data Shape", skorchData)
+            skorchPrediction = SkorchModel.predict(skorchData)
+
+            print("Random Forest Output",prediction)
+            # print("Random Forest Output",len(prediction))
+
+            print("Output",skorchPrediction)
+            print("Output",len(skorchPrediction))
+
+
             
 
 

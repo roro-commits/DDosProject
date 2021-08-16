@@ -271,8 +271,8 @@ class ProfessorMMA extends React.Component {
   {
     const graph = [];
     const simulationData=[];
-    const min = 1;
-    const max = 100;
+    const min = 0;
+    const max = 15000;
     let rand = min + Math.random() * (max - min)
      rand = rand.toFixed();
     console.log("rand:"+rand);

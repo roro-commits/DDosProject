@@ -7,13 +7,14 @@ from sklearn.preprocessing import MinMaxScaler
 import os
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split, RepeatedStratifiedKFold, cross_val_score
-import torch
+import torch as T
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision
 import torch.optim as optim
 from torch.utils.data import DataLoader, Dataset
 from sklearn.model_selection import GridSearchCV
+from sklearn_evaluation import plot
 
 
 from skorch.callbacks import EpochScoring
@@ -23,7 +24,9 @@ from skorch import NeuralNetBinaryClassifier
 
 
 
-intrusion_Data = pd.read_csv('C:\\Users\\captain-blacc\\Documents\\FYP-Project\\DDosProject\\MachineLearningModels\\NF-ToN-IoT.csv')
+# intrusion_Data = pd.read_csv('C:\\Users\\captain-blacc\\Documents\\FYP-Project\\DDosProject\\MachineLearningModels\\NF-ToN-IoT.csv')
+intrusion_Data = pd.read_csv('C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\sampled_data.csv')
+
 value =intrusion_Data[intrusion_Data.columns[0]].count()
 
 intrusion_Data = intrusion_Data.dropna()
@@ -116,7 +119,7 @@ class Net(nn.Module):
         self.hidden_layer6 = nn.Linear(general_layer_node, general_layer_node)
         self.hidden_layer7 = nn.Linear(general_layer_node, general_layer_node)
         self.hidden_layer8 = nn.Linear(general_layer_node, general_layer_node)
-        self.output_layer = nn.Linear(general_layer_node, 10)
+        self.output_layer = nn.Linear(general_layer_node, 1)
 
     def forward(self, x):
         x = F.relu(self.input_layer(x))
@@ -128,7 +131,7 @@ class Net(nn.Module):
         x = F.relu(self.hidden_layer6(x))
         x = F.relu(self.hidden_layer7(x))
         x = F.relu(self.hidden_layer8(x))
-        x = torch.sigmoid(self.output_layer(x))
+        x = T.sigmoid(self.output_layer(x))
         return x
 
     def get_num_correct(self, preds, labels):
@@ -137,7 +140,7 @@ class Net(nn.Module):
 
 X_train, X_test, y_train, y_test = train_test_split(x_data, labels, test_size=0.33, random_state=200)
 
-# converting th data type to float for the nueral network
+# converting th data type to float for the nueral networks
 X_train = X_train.astype(np.float32)
 X_test = X_test.astype(np.float32)
 y_train = y_train.astype(np.longlong)
@@ -151,16 +154,16 @@ print("X_train", y_train)
 
 net = NeuralNetClassifier(
     Net,
-    max_epochs=120,
-    lr=1,
-    # criterion=nn.BCEWithLogitsLoss,
-    criterion = nn.CrossEntropyLoss,
+    max_epochs=200,
+    lr=0.001,
+    criterion=nn.BCEWithLogitsLoss,
+    # criterion = nn.CrossEntropyLoss,
     # optimizer=optim.AdamW,
-    optimizer=optim.ASGD,
+    optimizer=T.optim.Adam,
     # device='cuda'
 )
 
-print("X train values",X_train.values)
+print("y test values",y_test.iloc[200])
 # print("X train values",X_train)
 
 net.fit(X_train.values, y_train.values)
@@ -170,3 +173,36 @@ Accuracy = net.score(X_test.values, y_test.values)
 y_probas = net.predict_proba(X_test.values)
 print("Accuracy",Accuracy)
 
+
+# prediction = net.predict(X_test.iloc[200].values)
+# print("£££££££££££££",prediction)
+
+
+file_name = './Skorchmymodel.pkl'
+net.save_params(f_params=file_name)
+
+
+params = {
+    # 'modules':[Net],
+    'lr': [0.001, 0.01, 0.05, 0.1],
+    'max_epochs': [100, 200, 250, 500],
+    'optimizer': [optim.Adam, optim.ASGD, optim.Adagrad, optim.Adadelta, optim.AdamW],
+    # 'device': 'cuda'
+}
+
+# gs = GridSearchCV(net, params, refit=False, cv=3, scoring='accuracy', verbose=2)
+
+# # trains each parameter
+# gs = gs.fit(X_train.values, y_train.values)
+
+# #prints best score of the search
+# print(gs.best_score_, gs.best_params_)
+
+# #gettign all the possible parameneters
+# print(net.get_params().keys())
+
+# # grid_search(gs.cv_results_, change='max_epochs')
+# plot.grid_search(gs.cv_results_, change='max_epochs', kind='bar')
+# # plot.
+
+plt.show()

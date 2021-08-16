@@ -126,7 +126,10 @@ plt.show()
 
 DataStore.dump(rfc, open('RandModel.pkl', 'wb'))
 
-print(DataStore.format_version)
+toPredict = np.asarray(X_test.iloc[200]).reshape(1, -1)
+prediction = rfc.predict(toPredict)
+
+print("Final", prediction)
 
 
 
