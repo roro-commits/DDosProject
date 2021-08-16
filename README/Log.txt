@@ -37,6 +37,8 @@ I spent most of this time on hyperparamter tuning as result I didnt not have muc
 and also work load from my full time job and other repeat modules & has dwindle the time capital I could use to commit to the project.
 So I have reduced the plan work for my project I will not be going with all 3 ML models. in order to wrap up then project in time. 
 
+for the Skorch Nueral network although the training and testing accuracy is 70%. The human readable result (interpretation) does not make sense. If I cant make sense of it in the coming days I will be dropping the model
+
 
 
 
