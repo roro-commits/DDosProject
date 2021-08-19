@@ -13,6 +13,7 @@ from skorch import NeuralNetBinaryClassifier
 from skorch import NeuralNetClassifier
 from Net_structure import Net as SkorchNet
 from Net_structure_binary import Net as SkorchNet_binary
+import torch 
 
 
 
