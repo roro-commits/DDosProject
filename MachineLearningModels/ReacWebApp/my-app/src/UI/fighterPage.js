@@ -71,18 +71,18 @@ const useStyle = (theme) => ({
   },
   Win: {
     backgroundColor: "#47ff63",
-    minWidth: 200,
-    minHeight: 300,
+    minWidth: 1750,
+    minHeight: 500,
   },
   Loss: {
     backgroundColor: "#F0A89C",
-    minWidth: 200,
-    minHeight: 300,
+    minWidth: 1750,
+    minHeight: 500,
   },
   draw: {
     backgroundColor: "#F0E79C",
-    minWidth: 200,
-    minHeight: 300,
+    minWidth: 1750,
+    minHeight: 500,
   },
   bullet: {
     display: "inline-block",
@@ -121,6 +121,8 @@ class ProfessorMMA extends React.Component {
       //data for graph and backend
       simulationData:[],
       graph:[],
+      simulation_sample:['10','100','200'],
+      selected_quanltity:1,
       //old
       FighterA: [],
       FighterB: [],
@@ -132,17 +134,24 @@ class ProfessorMMA extends React.Component {
       undWin: false,
       draw: false,
     };
-    // this.getFighterA = this.getFighterA.bind(this);
+    this.getQuantity = this.getQuantity.bind(this);
     this.getFighterB = this.getFighterB.bind(this);
     this.postData = this.postData.bind(this);
     this.setGraph = this.setGraph.bind(this);
+    this.multi_simulation = this.multi_simulation.bind(this);
+
+    
   }
 
-  // Pulls data from the back end and store in React Compnent
+  // Pulls data from the back end and store in React Compnent prod env
   async getOptions() {
-    const res = await axios.get(
-      "/static/csvjson.json"
-    );
+    // const res = await axios.get(
+    //   "/static/csvjson.json"
+    // );
+
+  // Dev Env
+    const res = await axios.get('http://127.0.0.1:5000//static/csvjson.json')
+
     const data = res.data;
 
     console.log(data.FLOW_DURATION_MILLISECONDS);
@@ -183,7 +192,7 @@ class ProfessorMMA extends React.Component {
     // }
 
     for (let i = 0; i < res.data.length; i++) {
-      console.log(data[i]["IPV4_SRC_ADDR"])
+      // console.log(data[i]["IPV4_SRC_ADDR"])
       if (data[i]["IPV4_SRC_ADDR"] !== undefined) {
         // IPV4_SRC_ADDR.push(data["IPV4_SRC_ADDR"][i]);
         IPV4_SRC_ADDR.push({ IPV4_SRC_ADDR:data[i]["IPV4_SRC_ADDR"] });
@@ -201,9 +210,9 @@ class ProfessorMMA extends React.Component {
         Label.push({ Label:data[i]["Label"] });
         Attack.push({ Attack:data[i]["Attack"] });
 
-        console.log({ L4_SRC_PORT })
-        console.log({ IPV4_SRC_ADDR })
-        console.log({FLOW_DURATION_MILLISECONDS})
+        // console.log({ L4_SRC_PORT })
+        // console.log({ IPV4_SRC_ADDR })
+        // console.log({FLOW_DURATION_MILLISECONDS})
 
 
 
@@ -239,38 +248,18 @@ class ProfessorMMA extends React.Component {
     this.setState({ name: e.label });
   }
 
-  // getFighterA(param) {
-  //   const indexA = this.state.selectOptionsNames.indexOf(param);
-  //   const FighterA = [];
+  getQuantity(param) {
+    const qauntity = Number(param)
+    console.log("quantity selected", qauntity)
+    this.setState({ selected_quanltity: qauntity });
+  }
 
-  //   if (indexA !== -1) {
-  //     // this.setState({FighterA:[]}) // reset array before setting new data
-  //     FighterA.push(this.state.selectOptionsNames[indexA].Name);
-  //     FighterA.push(this.state.height[indexA].Height);
-  //     FighterA.push(this.state.WEIGHT[indexA].WEIGHT);
-  //     FighterA.push(this.state.REACH[indexA].REACH);
-  //     FighterA.push(this.state.STANCE[indexA].STANCE);
-  //     FighterA.push(this.state.DOB[indexA].DOB);
-  //     FighterA.push(this.state.SLpM[indexA].SLpM);
-  //     FighterA.push(this.state.strikeAccuracy[indexA].StrAcc);
-  //     FighterA.push(this.state.SApM[indexA].SApM);
-  //     FighterA.push(this.state.strDef[indexA].strDef);
-  //     FighterA.push(this.state.tdAvg[indexA].tdAvg);
-  //     FighterA.push(this.state.tdAcc[indexA].tdAcc);
-  //     FighterA.push(this.state.tdDef[indexA].tdDef);
-  //     FighterA.push(this.state.subAvg[indexA].subAvg);
-  //   }
-  //   this.setState({ FighterA: FighterA });
-  //   this.setState({ Response: false });
-  //   this.setState({ favWin: false });
-  //   this.setState({ undWin: false });
-  //   this.setState({ draw: false });
-  // }
-
-  setGraph() 
+  setGraph(i) 
   {
     const graph = [];
     const simulationData=[];
+    const binary_result =[];
+    const type_result = []; 
     const min = 0;
     const max = 15000;
     let rand = min + Math.random() * (max - min)
@@ -309,6 +298,20 @@ class ProfessorMMA extends React.Component {
 
     console.log("Simulation data!!!!!!!!!!"+ simulationData);
     this.setState({simulationData:simulationData});
+
+
+    binary_result.push(this.state.Label[rand].Label);
+    type_result.push(this.state.Attack[rand].Attack);
+
+    console.log("Result Data !!!!!!!!!");
+    
+    console.log("Binary Result", binary_result, "  type of attack", type_result);
+    
+    setTimeout(function() {
+      console.log(i);
+  }, 2000 * i);
+
+  this.postData()
 
   }
 
@@ -354,27 +357,32 @@ class ProfessorMMA extends React.Component {
     //   })
 
     const res = axios({
-      url: "/api/react_api",
+      //prod env
+      // url: "/api/react_api",
+      //dev env
+      url: "http://127.0.0.1:5000//api/react_api",
       method: "POST",
       data: predictData,
       // `headers` are custom headers to be sent
       headers: { form: "form" },
     })
       .then((response) => {
-        // let fighterA = '';
-        // let fighterB = '';
+        let fighterA = '';
+        let fighterB = '';
 
-        console.log(response.data);
+        console.log("Result",response.data);
         console.log("File has been sent to the server ");
         this.setState({ Response: true });
         this.setState({ Response1: true });
 
-        let fighterA = response.data.FAVOURITE;
-        let fighterB = response.data.UNDERDOG;
+        let main_predicition = response.data.MAIN_BINARY;
+        let random_forest_prediction = response.data.RAND_PREDICTIOB;
+        let skorch_prediction = response.data.SKORCH_PREDICTION;
 
-        if (fighterA !== "Draw" && fighterB !== "Draw") {
-          fighterA = Number(fighterA);
-          fighterB = Number(fighterB);
+
+        if (random_forest_prediction !== "Draw" && skorch_prediction !== "Draw") {
+          fighterA = Number(random_forest_prediction);
+          fighterB = Number(skorch_prediction);
 
           if (fighterA > fighterB) {
             this.setState({ favWin: true });
@@ -397,6 +405,26 @@ class ProfessorMMA extends React.Component {
     console.log(predictData);
 
     // console.log(res)
+  }
+
+
+// multiple simulation
+  async multi_simulation() {
+    console.log("I work");
+   
+    let index = this.state.selected_quanltity
+    
+    if(index != 0)
+    {
+      for(let i =0; i < index; i++)
+      {
+        //simulate a click 
+          this.setGraph(4000)
+          // this.postData()
+
+      }
+    }
+    
   }
 
   // const Grids = (props) => <Grid container {...props} />
@@ -473,10 +501,7 @@ class ProfessorMMA extends React.Component {
                   >
                     <CardActionArea>
                       <CardActions>
-                       
-                          
-                          
-                        
+                      
                         <GridRow justify="center" alignItems="center">
                         <Typography variant="h7" component="h1">
                             DATA 
@@ -524,10 +549,10 @@ class ProfessorMMA extends React.Component {
                         <Paper styles={classes.paper}>
                           <Autocomplete
                             id="FighterA"
-                            options={this.state.selectOptionsNames}
-                            getOptionLabel={(option) => option.Name}
+                            options={this.state.simulation_sample}
+                            // getOptionLabel={(option) => option.Name}
                             style={{ width: 500 }}
-                            onChange={(event, value) => this.getFighterA(value)} // sends Index of selected Item Fighter A
+                            onChange={(event, value) => this.getQuantity(value)} // sends Index of selected Item Fighter A
                             renderInput={(params) => (
                               <TextField
                                 {...params}
@@ -563,6 +588,15 @@ class ProfessorMMA extends React.Component {
                             component="span"
                           >
                             Graph test
+                          </Button>
+                          <Button
+                            size="large"
+                            variant="contained"
+                            color="primary"
+                            onClick={this.multi_simulation}
+                            component="span"
+                          >
+                            Multiple simulation
                           </Button>
                           
                         </label>

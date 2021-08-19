@@ -10,7 +10,10 @@ import numpy as np
 import os
 import pickle
 from skorch import NeuralNetBinaryClassifier
+from skorch import NeuralNetClassifier
 from Net_structure import Net as SkorchNet
+from Net_structure_binary import Net as SkorchNet_binary
+
 
 
 
@@ -27,7 +30,7 @@ randModel = pickle.load(open('C:\\Users\captain-blacc\Documents\FYP-Project\DDos
 
 ##loading skorch model
 
-SkorchModel = NeuralNetBinaryClassifier(
+SkorchModel = NeuralNetClassifier(
     SkorchNet,
     # max_epochs=120,
     # lr=0.001,
@@ -38,7 +41,17 @@ SkorchModel = NeuralNetBinaryClassifier(
 # SkorchModel.load_params('Skorchmymodel.pkl')
 SkorchModel.load_params(f_params= r'C:\Users\captain-blacc\Documents\FYP-Project\DDosProject\build\mlModel\Skorchmymodel.pkl')
 
+#Skorchmymodel_binary.pkl
 
+SkorchModel_binary = NeuralNetBinaryClassifier(
+    SkorchNet_binary,
+    # max_epochs=120,
+    # lr=0.001,
+    # criterion=nn.BCEWithLogitsLoss,
+    # optimizer=optim.AdamW,
+).initialize()
+
+SkorchModel_binary.load_params(f_params= r'C:\Users\captain-blacc\Documents\FYP-Project\DDosProject\build\mlModel\Skorchmymodel_binary.pkl')
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -143,31 +156,40 @@ def react_api():
 
             #################### Prediction Data #################
             toPredict = np.asarray(intrusion_Data.iloc[-1]).reshape(1, -1)
-            toPredict_skorch = np.asarray(intrusion_Data.iloc[-1])
+            toPredict_skorch = np.asarray(intrusion_Data.iloc[-1]).reshape(1, -1)
 
             print("Data for Prediction¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬", toPredict,"Lenghth",len(toPredict[0]))
 
              ## Random \Forest prediction
-            prediction = randModel.predict(toPredict)
+            rand_prediction = randModel.predict(toPredict)
+
+            #Skorch Data Prediction
 
             skorchData = toPredict_skorch.astype(np.float32)
             print("Data Shape", skorchData)
             skorchPrediction = SkorchModel.predict(skorchData)
 
-            print("Random Forest Output",prediction)
+            #Skorch_Binary Data Prediction
+            skorch_binary_prediction  = SkorchModel_binary.predict(skorchData)
+
+            print("Random Forest Output",rand_prediction)
             # print("Random Forest Output",len(prediction))
 
-            print("Output",skorchPrediction)
+            print("Skorch Prediction",skorchPrediction)
             print("Output",len(skorchPrediction))
 
+            print ("Skorch Binary Output",skorch_binary_prediction)
+        
+            # result = [skorch_binary_prediction[0],rand_prediction[0],skorchPrediction[0]]
 
-            
-
-
-        return str(prediction)
-
-
-
+            # print("try", result)
+            skorch_binary_prediction = skorch_binary_prediction[0]
+            rand_prediction = rand_prediction[0]
+            skorchPrediction = skorchPrediction[0]
+        return ({'MAIN_BINARY': str(skorch_binary_prediction),
+                         'RAND_PREDICTIOB': str(rand_prediction),
+                         'SKORCH_PREDICTION':str(skorchPrediction),
+                         })
 
 if __name__ == "__main__":
     # app.run(debug=True)

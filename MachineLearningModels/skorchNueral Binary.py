@@ -67,8 +67,8 @@ intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('ransomware','9')
 intrusion_Data['Attack'] = encoder.LabelEncoder().fit_transform(intrusion_Data['Attack'])
 
 
-#Dropping Lable as its not need
-intrusion_Data = intrusion_Data.drop(['Label'],axis=1)
+#Dropping Attack Lable as its not need 
+intrusion_Data = intrusion_Data.drop(['Attack'],axis=1)
 
 # normarlising data to covert data range between 0-1
 
@@ -81,15 +81,17 @@ intrusion_Data[cols_to_normarlize] = scaler.fit_transform(intrusion_Data[cols_to
 
 # checking if data is normalised 
 print (intrusion_Data.head())
-print (intrusion_Data["Attack"].value_counts())
+print (intrusion_Data["Label"].value_counts())
 
 
 #sepertaing lables and fetaures 
 
-x_data = intrusion_Data.drop('Attack', axis=1)
+# x_data = intrusion_Data.drop('Attack', axis=1)
+x_data = intrusion_Data.drop('Label', axis=1)
+
 
 #label has mutliple atrributes that must be determined later
-labels = intrusion_Data['Attack']
+labels = intrusion_Data['Label']
 
 X_train, X_test, y_train, y_test = train_test_split(x_data, labels, test_size=0.33, random_state=200)
 
@@ -119,7 +121,7 @@ class Net(nn.Module):
         self.hidden_layer6 = nn.Linear(general_layer_node, general_layer_node)
         self.hidden_layer7 = nn.Linear(general_layer_node, general_layer_node)
         self.hidden_layer8 = nn.Linear(general_layer_node, general_layer_node)
-        self.output_layer = nn.Linear(general_layer_node, 10)
+        self.output_layer = nn.Linear(general_layer_node, 1)
 
     def forward(self, x):
         x = F.relu(self.input_layer(x))
@@ -143,7 +145,8 @@ X_train, X_test, y_train, y_test = train_test_split(x_data, labels, test_size=0.
 # converting th data type to float for the nueral networks
 X_train = X_train.astype(np.float32)
 X_test = X_test.astype(np.float32)
-y_train = y_train.astype(np.longlong)
+# y_train = y_train.astype(np.longlong)
+y_train = y_train.astype(np.float32)
 y_test = y_test.astype(np.float32)
 
 print("X_train", y_train)
@@ -152,12 +155,12 @@ print("X_train", y_train)
 
 # skorch.make_binary_classifier(squeeze_output=True)
 
-net = NeuralNetClassifier(
+net = NeuralNetBinaryClassifier(
     Net,
-    max_epochs=1,
+    max_epochs=200,
     lr=0.001,
-    # criterion=nn.BCEWithLogitsLoss,
-    criterion = nn.CrossEntropyLoss,
+    criterion=nn.BCEWithLogitsLoss,
+    # criterion = nn.CrossEntropyLoss,
     # optimizer=optim.AdamW,
     optimizer=T.optim.Adam,
     # device='cuda'
@@ -178,7 +181,7 @@ print("Accuracy",Accuracy)
 # print("£££££££££££££",prediction)
 
 
-file_name = './Skorchmymodel.pkl'
+file_name = './Skorchmymodel_binary.pkl'
 net.save_params(f_params=file_name)
 
 
@@ -204,21 +207,5 @@ params = {
 # # grid_search(gs.cv_results_, change='max_epochs')
 # plot.grid_search(gs.cv_results_, change='max_epochs', kind='bar')
 # # plot.
-
- #################### Prediction Data #################
-# toPredict = np.asarray(intrusion_Data.iloc[-1]).reshape(1, -1)
-toPredict_skorch = np.asarray(X_train.iloc[-1]).reshape(1, -1)
-
-
-#Skorch Data Prediction
-
-skorchData = toPredict_skorch.astype(np.float32)
-print("Data Shape", skorchData)
-print("Output",len(skorchData[0]))
-
-skorchPrediction = net.predict(skorchData)
-
-print("Data says :", skorchPrediction)
-
 
 plt.show()

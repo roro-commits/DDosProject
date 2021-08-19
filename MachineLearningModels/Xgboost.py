@@ -48,19 +48,36 @@ intrusion_Data['IPV4_SRC_ADDR'] = encoder.LabelEncoder().fit_transform(intrusion
 intrusion_Data['IPV4_DST_ADDR'] = encoder.LabelEncoder().fit_transform(intrusion_Data['IPV4_DST_ADDR'])
 
 
+print ("value count",intrusion_Data["Attack"].unique())
+
+
 # setting the structure of the categorical data 
-intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('injection','0')
-intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('ddos','1')
+# intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('injection','0')
+# intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('ddos','1')
+# intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('Benign','2')
+# intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('password','3')
+# intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('xss','4')
+# intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('scanning','5')
+# intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('dos','6')
+# intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('backdoor','7')
+# intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('mitm','8')
+# intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('ransomware','9')
+# intrusion_Data['Attack'] = encoder.LabelEncoder().fit_transform(intrusion_Data['Attack'])
+
+# value count ['password' 'xss' 'Benign' 'injection' 'ddos' 'scanning' 'dos' 'backdoor'
+#  'mitm' 'ransomware']
+
+intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('injection','3')
+intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('ddos','4')
 intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('Benign','2')
-intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('password','3')
-intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('xss','4')
+intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('password','0')
+intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('xss','1')
 intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('scanning','5')
 intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('dos','6')
 intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('backdoor','7')
 intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('mitm','8')
 intrusion_Data['Attack'] = intrusion_Data['Attack'].replace('ransomware','9')
 intrusion_Data['Attack'] = encoder.LabelEncoder().fit_transform(intrusion_Data['Attack'])
-
 
 #Dropping Lable as its not need
 intrusion_Data = intrusion_Data.drop(['Label'],axis=1)
@@ -76,7 +93,7 @@ intrusion_Data[cols_to_normarlize] = scaler.fit_transform(intrusion_Data[cols_to
 
 # checking if data is normalised 
 print (intrusion_Data.head())
-print (intrusion_Data["Attack"].value_counts())
+print ("value count",intrusion_Data["Attack"].unique())
 
 
 #sepertaing lables and fetaures 
@@ -90,7 +107,8 @@ X_train, X_test, y_train, y_test = train_test_split(x_data, labels, test_size=0.
 
 
 
-model = xgb.XGBClassifier(objective="multi:softprob",
+model = xgb.XGBClassifier(
+                          objective="multi:softmax",
                           learning_rate=0.1,
                           missing=None,
                           gamma=0.25,
@@ -98,10 +116,30 @@ model = xgb.XGBClassifier(objective="multi:softprob",
                           seed=42,
                           n_estimators=100,
                           use_label_encoder=False,
-                          eval_metric="error"
+                          eval_metric="merror",
+                          num_class=8,
                           )
-model.fit(X_train, y_train, verbose=True, early_stopping_rounds=100, eval_metric='mlogloss', eval_set=[(X_test, y_test)])
+params = {
+    'objective':"multi:softmax",
+    'learning_rate':0.1,
+    'missing':None,
+    'gamma':0.25,
+    'max_depth':5,
+    'seed':42,
+    # 'n_estimators':100,
+    # 'use_label_encoder':False,
+    'eval_metric':"merror",
+    'num_class':10
+}
 
+d_train = xgb.DMatrix(X_train, label=y_train)
+d_test = xgb.DMatrix(X_test, label=y_test)
+
+
+# model.fit(X_train, y_train, verbose=True, early_stopping_rounds=100, eval_metric='merror', eval_set=[(X_test, y_test)])
+model.fit(X_train, y_train)
+
+xgb.train(params,dtrain=d_train)
 # plot_confusion_matrix(model, X_test, y_test, values_format='d')
 
 plt.figure(figsize=(12, 12))
