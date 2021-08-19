@@ -121,7 +121,7 @@ class ProfessorMMA extends React.Component {
       //data for graph and backend
       simulationData:[],
       graph:[],
-      simulation_sample:['10','100','200'],
+      simulation_sample:['2','10','100','200'],
       selected_quanltity:1,
       //old
       FighterA: [],
@@ -139,7 +139,9 @@ class ProfessorMMA extends React.Component {
     this.postData = this.postData.bind(this);
     this.setGraph = this.setGraph.bind(this);
     this.multi_simulation = this.multi_simulation.bind(this);
+    // this.inputElement = this.inputElement.bind(this);
 
+    
     
   }
 
@@ -264,7 +266,9 @@ class ProfessorMMA extends React.Component {
     const max = 15000;
     let rand = min + Math.random() * (max - min)
      rand = rand.toFixed();
-    console.log("rand:"+rand);
+  
+
+    
     
     graph.push(this.state.FLOW_DURATION_MILLISECONDS[rand].FLOW_DURATION_MILLISECONDS);
     graph.push(this.state.OUT_PKTS[rand].OUT_PKTS);
@@ -275,8 +279,8 @@ class ProfessorMMA extends React.Component {
     graph.push(this.state.L7_PROTO[rand].L7_PROTO);
 
 
-    console.log("graph!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+graph)
-    this.setState({graph:graph});
+
+   
 
     // ["IPV4_SRC_ADDR","L4_SRC_PORT","IPV4_DST_ADDR","L4_DST_PORT","PROTOCOL","L7_PROTO",
     //                    "IN_BYTES","OUT_BYTES","IN_PKTS","OUT_PKTS","TCP_FLAGS","FLOW_DURATION_MILLISECONDS"
@@ -296,22 +300,46 @@ class ProfessorMMA extends React.Component {
     simulationData.push(this.state.FLOW_DURATION_MILLISECONDS[rand].FLOW_DURATION_MILLISECONDS);
 
 
-    console.log("Simulation data!!!!!!!!!!"+ simulationData);
-    this.setState({simulationData:simulationData});
+
+ 
+
+     setTimeout(() => {
+      console.log("rand:"+rand);
+
+      console.log("simulation data: ", i);
+
+        
+        this.setState({simulationData:simulationData});
+        console.log("Simulation data!!!!!!!!!!"+ simulationData);
+
+        this.postData(simulationData)
+
+
+        this.setState({graph:graph});
+        console.log("graph!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+graph)
+
+        console.log("Binary Result", binary_result, "  type of attack", type_result);
+
+
+
+       
+      }, 2000)
+
+  
+      
+
 
 
     binary_result.push(this.state.Label[rand].Label);
     type_result.push(this.state.Attack[rand].Attack);
 
-    console.log("Result Data !!!!!!!!!");
+    // console.log("Result Data !!!!!!!!!");
     
-    console.log("Binary Result", binary_result, "  type of attack", type_result);
     
-    setTimeout(function() {
-      console.log(i);
-  }, 2000 * i);
+    
+    // this.postData()
+    // console.log("posted !!!!!!!!!");
 
-  this.postData()
 
   }
 
@@ -341,12 +369,17 @@ class ProfessorMMA extends React.Component {
     this.setState({ draw: "" });
   }
 
-  async postData() {
-    let predictData;
+  async postData(data) {
+    setTimeout(() => {
+
+      let predictData;
 
     // if (this.state.FighterA.length > 0 && this.state.FighterB.length > 0) {
     //   predictData = this.state.FighterA.concat(this.state.FighterB);
     // }
+
+
+
     predictData = this.state.simulationData;
 
     const axios = require("axios");
@@ -362,13 +395,20 @@ class ProfessorMMA extends React.Component {
       //dev env
       url: "http://127.0.0.1:5000//api/react_api",
       method: "POST",
-      data: predictData,
+      data: data,
       // `headers` are custom headers to be sent
       headers: { form: "form" },
     })
       .then((response) => {
         let fighterA = '';
         let fighterB = '';
+        predictData = this.state.simulationData;
+
+
+    // this.setState({graph:[]});
+    // this.setState({simulationDatsa:[]});
+
+
 
         console.log("Result",response.data);
         console.log("File has been sent to the server ");
@@ -402,28 +442,44 @@ class ProfessorMMA extends React.Component {
         console.log("internal Server Error");
       });
 
-    console.log(predictData);
+    console.log("Prediction Data: ",data);
+    }, 1000)
+
+    
 
     // console.log(res)
   }
 
 
+  
 // multiple simulation
-  async multi_simulation() {
+   multi_simulation() {
     console.log("I work");
    
     let index = this.state.selected_quanltity
     
+   while(index >0)
+   {
     if(index != 0)
     {
-      for(let i =0; i < index; i++)
-      {
-        //simulate a click 
-          this.setGraph(4000)
-          // this.postData()
+      
+      // this.myButton.click()
+      this.setGraph(index);
 
-      }
+
     }
+    // this.postData()
+    // setTimeout(() => {
+    //   this.postData();
+
+    // }, 1000)
+
+
+    index--;
+
+   }
+   
+
     
   }
 
@@ -586,6 +642,7 @@ class ProfessorMMA extends React.Component {
                             color="primary"
                             onClick={this.setGraph}
                             component="span"
+                            ref={(ref) => { this.myButton = ref; }}
                           >
                             Graph test
                           </Button>
@@ -598,6 +655,7 @@ class ProfessorMMA extends React.Component {
                           >
                             Multiple simulation
                           </Button>
+
                           
                         </label>
                         <h1>{/*{this.state.Response}*/}</h1>
