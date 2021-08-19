@@ -7,3 +7,10 @@ pandas==1.2.5
 matplotlib==3.3.4
 numpy==1.20.1
 gunicorn==20.0.4
+skorch==0.10.0
+
+from skorch import NeuralNetBinaryClassifier
+from skorch import NeuralNetClassifier
+from Net_structure import Net as SkorchNet
+from Net_structure_binary import Net as SkorchNet_binary
+
