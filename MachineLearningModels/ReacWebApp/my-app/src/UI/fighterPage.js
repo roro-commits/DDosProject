@@ -147,12 +147,12 @@ class ProfessorMMA extends React.Component {
 
   // Pulls data from the back end and store in React Compnent prod env
   async getOptions() {
-    // const res = await axios.get(
-    //   "/static/csvjson.json"
-    // );
+    const res = await axios.get(
+      "/static/csvjson.json"
+    );
 
   // Dev Env
-    const res = await axios.get('http://127.0.0.1:5000//static/csvjson.json')
+    // const res = await axios.get('http://127.0.0.1:5000//static/csvjson.json')
 
     const data = res.data;
 
@@ -391,9 +391,9 @@ class ProfessorMMA extends React.Component {
 
     const res = axios({
       //prod env
-      // url: "/api/react_api",
+      url: "/api/react_api",
       //dev env
-      url: "http://127.0.0.1:5000//api/react_api",
+      // url: "http://127.0.0.1:5000//api/react_api",
       method: "POST",
       data: data,
       // `headers` are custom headers to be sent

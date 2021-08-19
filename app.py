@@ -19,14 +19,14 @@ from Net_structure_binary import Net as SkorchNet_binary
 
 
 
-# app = Flask(__name__, static_folder='/app/build',template_folder='/app/build', static_url_path='/')
-# CORS(app, support_credentials=True)
-app = Flask(__name__, static_folder='C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\build',template_folder='C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\build', static_url_path='/')
+app = Flask(__name__, static_folder='/app/build',template_folder='/app/build', static_url_path='/')
 CORS(app, support_credentials=True)
+# app = Flask(__name__, static_folder='C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\build',template_folder='C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\build', static_url_path='/')
+# CORS(app, support_credentials=True)
 
 
-randModel = pickle.load(open('C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\build\mlModel\RandModel.pkl', 'rb'))
-# randModel = pickle.load(open('/app/build/mlModel/RandModel.pkl', 'rb'))
+# randModel = pickle.load(open('C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\\build\mlModel\RandModel.pkl', 'rb'))
+randModel = pickle.load(open('/app/build/mlModel/RandModel.pkl', 'rb'))
 
 ##loading skorch model
 
@@ -39,8 +39,10 @@ SkorchModel = NeuralNetClassifier(
 ).initialize()
 
 # SkorchModel.load_params('Skorchmymodel.pkl')
-SkorchModel.load_params(f_params= r'C:\Users\captain-blacc\Documents\FYP-Project\DDosProject\build\mlModel\Skorchmymodel.pkl')
+SkorchModel.load_params(f_params= '/app/build/mlModel/Skorchmymodel.pkl')
+# SkorchModel.load_params(f_params= r'C:\Users\captain-blacc\Documents\FYP-Project\DDosProject\build\mlModel\Skorchmymodel.pkl')
 
+#/app/build/mlModel/
 #Skorchmymodel_binary.pkl
 
 SkorchModel_binary = NeuralNetBinaryClassifier(
@@ -51,7 +53,8 @@ SkorchModel_binary = NeuralNetBinaryClassifier(
     # optimizer=optim.AdamW,
 ).initialize()
 
-SkorchModel_binary.load_params(f_params= r'C:\Users\captain-blacc\Documents\FYP-Project\DDosProject\build\mlModel\Skorchmymodel_binary.pkl')
+SkorchModel_binary.load_params(f_params= '/app/build/mlModel/Skorchmymodel_binary.pkl')
+# SkorchModel_binary.load_params(f_params= r'C:\Users\captain-blacc\Documents\FYP-Project\DDosProject\build\mlModel\Skorchmymodel_binary.pkl')
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -100,9 +103,9 @@ def react_api():
 
             # intrusion_Data = pd.read_csv('/app/build/static/basic_data.csv')
             # intrusion_Data = pd.read_csv('C:\\Users\captain-blacc\Documents\FYP-Project\DDosProject\MachineLearningModels\\basic_data.csv')
-            intrusion_Data = pd.read_csv(r'C:\Users\captain-blacc\Documents\FYP-Project\DDosProject\build\mlModel\sampled_data.csv')
+            # intrusion_Data = pd.read_csv(r'C:\Users\captain-blacc\Documents\FYP-Project\DDosProject\build\mlModel\sampled_data.csv')
 
-            # intrusion_Data = pd.read_csv('/app/build/mlModel/sampled_data.csv')
+            intrusion_Data = pd.read_csv('/app/build/mlModel/sampled_data.csv')
 
 
             value =intrusion_Data[intrusion_Data.columns[0]].count()
