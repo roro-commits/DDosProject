@@ -78,15 +78,6 @@ def not_found(e):
   return app.send_static_file('index.html')
 
 
-@app.after_request
-def add_header(response):    
-  response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
-  if ('Cache-Control' not in response.headers):
-    response.headers['Cache-Control'] = 'public, max-age=0'
-  return response
-
-
-
 @app.route('/', methods=['GET', 'POST'])
 def home():
     print("ccheking2", flush=True)
