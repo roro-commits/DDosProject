@@ -78,26 +78,6 @@ def not_found(e):
   return app.send_static_file('index.html')
 
 
-@app.route('/', methods=['GET', 'POST'])
-def home():
-    print("ccheking2", flush=True)
-    return send_from_directory(app.static_folder, "index.html")
-
-# @app.route("/static/csvjson.json", methods=["GET"])
-# @cross_origin(supports_credentials=True)
-# def get_example():
-#     """GET in server"""
-#     response = jsonify(message="Simple server is running")
-
-#     # Enable Access-Control-Allow-Origin
-#     response.headers.add("Access-Control-Allow-Origin", "*")
-#     return response
-
-# catching React Router urls 
-@app.errorhandler(404)   
-def not_found(e):   
-  return app.send_static_file('index.html')
-
 #new
 @app.route('/api/saveData', methods=['GET','POST'])
 @cross_origin(supports_credentials=True)
