@@ -201,12 +201,12 @@ class ProfessorMMA extends React.Component {
 
   // Pulls data from the back end and store in React Compnent prod env
   async getOptions() {
-    // const res = await axios.get(
-    //   "/static/csvjson.json"
-    // );
+    const res = await axios.get(
+      "/static/csvjson.json"
+    );
 
   // Dev Env
-    const res = await axios.get('http://127.0.0.1:5000//static/csvjson.json')
+    // const res = await axios.get('http://127.0.0.1:5000//static/csvjson.json')
 
     const data = res.data;
 
