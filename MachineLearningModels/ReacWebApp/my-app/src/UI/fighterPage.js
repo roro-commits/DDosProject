@@ -532,27 +532,13 @@ class ProfessorMMA extends React.Component {
 
 
 
-
-    
-
-    // if (this.state.FighterA.length > 0 && this.state.FighterB.length > 0) {
-    //   predictData = this.state.FighterA.concat(this.state.FighterB);
-    // }
-
-
-
     const axios = require("axios");
 
-    // axios.post('http://localhost:5000/predict', predictData)
-    //   .then(function (response) {
-    //     console.log(response);
-    //   })
-
+ 
     const res = axios({
       //prod env
       url: "/api/saveData",
-      //dev env
-      // url: "http://127.0.0.1:5000//api/saveData",
+ 
       method: "POST",
       data: data,
       // `headers` are custom headers to be sent
