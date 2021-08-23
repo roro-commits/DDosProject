@@ -157,7 +157,6 @@ function Header(props) {
       if (props.value !==2){
         props.setValue(2)
 
-          clearCacheData();
       }
 
     break;
