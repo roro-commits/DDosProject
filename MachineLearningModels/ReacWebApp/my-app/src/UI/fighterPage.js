@@ -118,10 +118,63 @@ class ProfessorMMA extends React.Component {
       FLOW_DURATION_MILLISECONDS : [200],
       Label : [],
       Attack : [],
+      //Result binary  Check 
+      Binary_result:[],
+      Binary_prediction:[],
+      Binary_total_correct: 0,
+      Binary_total_wrong: 0,
+
+      //Graph staticis page 
+      // #[5 rows x 13 columns]
+      // #0 injection     468539
+      // #1 ddos          326345
+      // #2 Benign        270279 free from virus
+      // #3 password      156299
+      // #4 xss            99944
+      // #5 scanning       21467
+      // #6 Dos            17717
+      // #7 backdoor       17247
+      // #8 mitm            1295
+      // #9 ransomware       142
+
+      injection_correct:0,
+      injection_incorrect:0,
+      dos_correct:0,
+      dos_Incorrect:0,
+      Benign_correct:0,
+      Benign_incorrect:0,
+      password_correct:0,
+      password_incorrect:0,
+      xss_correct:0,
+      xss_incorrect:0,
+      scanning_correct:0,
+      scanning_incorrect:0,
+      ddos_correct:0,
+      ddos_incorrect:0,
+      backdoor_correct:0,
+      backdoor_incorrect:0,
+      mitm_correct:0,
+      mitm_incorrect:0,
+      ransomware_correct:0,
+      ransomware_incorrect:0,
+      //type result 
+      type_result:[],
+      // skorch
+      skorch_result:[],
+      skorch_prediction:[],
+      skorch_total_correct: 0,
+      skorch_total_wrong: 0,
+      // Random Forest
+      Random_result:[],
+      Random_prediction:[],
+      Random_total_correct: 0,
+      Random_total_wrong: 0,
+      //
+      index:0,
       //data for graph and backend
       simulationData:[],
       graph:[],
-      simulation_sample:['2','10','100','200'],
+      simulation_sample:['2','4','10','20','40','50','60','80','90','100','200','500','1000'],
       selected_quanltity:1,
       //old
       FighterA: [],
@@ -139,6 +192,7 @@ class ProfessorMMA extends React.Component {
     this.postData = this.postData.bind(this);
     this.setGraph = this.setGraph.bind(this);
     this.multi_simulation = this.multi_simulation.bind(this);
+    this.saveData = this.saveData.bind(this);
     // this.inputElement = this.inputElement.bind(this);
 
     
@@ -147,12 +201,12 @@ class ProfessorMMA extends React.Component {
 
   // Pulls data from the back end and store in React Compnent prod env
   async getOptions() {
-    const res = await axios.get(
-      "/static/csvjson.json"
-    );
+    // const res = await axios.get(
+    //   "/static/csvjson.json"
+    // );
 
   // Dev Env
-    // const res = await axios.get('http://127.0.0.1:5000//static/csvjson.json')
+    const res = await axios.get('http://127.0.0.1:5000//static/csvjson.json')
 
     const data = res.data;
 
@@ -266,6 +320,11 @@ class ProfessorMMA extends React.Component {
     const max = 15000;
     let rand = min + Math.random() * (max - min)
      rand = rand.toFixed();
+
+     this.setState({Response:false});
+
+    
+
   
 
     
@@ -303,7 +362,31 @@ class ProfessorMMA extends React.Component {
 
  
 
-     setTimeout(() => {
+ 
+
+  
+      
+
+
+
+    binary_result.push(this.state.Label[rand].Label);
+
+    this.setState(prevState => ({
+      Binary_result: [...prevState.Binary_result, binary_result[0]]
+    }))
+
+
+    type_result.push(this.state.Attack[rand].Attack);
+
+    this.setState(prevState => ({
+      type_result: [...prevState.type_result, type_result[0]]
+    }))
+
+
+
+
+
+    setTimeout(() => {
       console.log("rand:"+rand);
 
       console.log("simulation data: ", i);
@@ -324,22 +407,6 @@ class ProfessorMMA extends React.Component {
 
        
       }, 2000)
-
-  
-      
-
-
-
-    binary_result.push(this.state.Label[rand].Label);
-    type_result.push(this.state.Attack[rand].Attack);
-
-    // console.log("Result Data !!!!!!!!!");
-    
-    
-    
-    // this.postData()
-    // console.log("posted !!!!!!!!!");
-
 
   }
 
@@ -367,6 +434,176 @@ class ProfessorMMA extends React.Component {
     this.setState({ Response1: false });
     this.setState({ undWin: "" });
     this.setState({ draw: "" });
+  }
+
+
+
+  async saveData() {
+
+
+
+      setTimeout(() => {
+
+      let data = [
+        {
+          "subject": "injection",
+          "Correct": this.state.injection_correct,
+          "Incorrect": this.state.injection_incorrect,
+          'fullMark': 20,
+        },
+      
+        {
+          "subject": "ddos",
+          "Correct": this.state.ddos_correct,
+          "Incorrect":this.state.ddos_incorrect,
+          "fullMark": 10,
+        },
+        {
+          "subject": "Benign",
+          "Correct": this.state.Benign_correct,
+          "Incorrect": this.state.Benign_incorrect,
+          "fullMark": 10,
+        },
+        {
+          "subject": "password",
+          "Correct": this.state.password_correct,
+          "Incorrect": this.state.password_incorrect,
+          "fullMark": 10,
+        },
+        {
+          "subject": "xss",
+          "Correct": this.state.xss_incorrect,
+          "Incorrect": this.state.xss_incorrect,
+          "fullMark": 10,
+        },
+        {
+          "subject": "Scanning",
+          "Correct": this.state.scanning_correct,
+          "Incorrect":  this.state.scanning_incorrect,
+          "fullMark": 10,
+        },
+        {
+          "subject": "Dos",
+          "Correct": this.state.dos_correct,
+          "Incorrect": this.state.dos_Incorrect,
+          "fullMark": 10,
+        }, {
+          "subject": "backdoor",
+          "Correct": this.state.backdoor_correct,
+          "Incorrect": this.state.backdoor_incorrect,
+          "fullMark": 10,
+        }, {
+          "subject": "mitm",
+          "Correct": this.state.mitm_correct,
+          "Incorrect": this.state.mitm_incorrect,
+          "fullMark": 10,
+        },
+              {
+          "subject": "ransom",
+          "Correct": this.state.ransomware_correct,
+          "Incorrect": this.state.ransomware_incorrect,
+          "fullMark": 10,
+        },
+        {
+          "subject": "Binary_ML",
+          "Correct": this.state.Binary_total_correct,
+          "Incorrect": this.state.Binary_total_wrong,
+          "fullMark": 10,
+            },
+            {
+              "subject": "Random Forest",
+              "Correct": this.state.Random_total_correct,
+              "Incorrect": this.state.Random_total_wrong,
+              "fullMark": 10,
+          },
+          {
+            "subject": "Skorch",
+            "Correct": this.state.skorch_total_correct,
+            "Incorrect": this.state.skorch_total_wrong,
+            "fullMark": 10,
+          },
+              
+      
+    ];
+
+
+
+    console.log("Total correct :  " ,this.state.Random_total_correct,this.state.skorch_total_correct, this.state.Binary_total_correct)
+
+
+
+
+    
+
+    // if (this.state.FighterA.length > 0 && this.state.FighterB.length > 0) {
+    //   predictData = this.state.FighterA.concat(this.state.FighterB);
+    // }
+
+
+
+    const axios = require("axios");
+
+    // axios.post('http://localhost:5000/predict', predictData)
+    //   .then(function (response) {
+    //     console.log(response);
+    //   })
+
+    const res = axios({
+      //prod env
+      url: "/api/react_api",
+      //dev env
+      // url: "http://127.0.0.1:5000//api/saveData",
+      method: "POST",
+      data: data,
+      // `headers` are custom headers to be sent
+      headers: { form: "form" },
+    })
+      .then((response) => {
+
+        this.setState({Random_total_correct:0});
+        this.setState({Random_total_wrong:0});
+        this.setState({skorch_total_correct:0});
+        this.setState({skorch_total_wrong:0});
+        this.setState({binary_total_correct:0});
+        this.setState({binary_total_wrong:0});
+        this.setState({injection_correct : 0})
+        this.setState({injection_incorrectcorrect : 0})
+        this.setState({ddos_correct : 0})
+        this.setState({ddos_incorrect : 0})
+        this.setState({Benign_correct : 0})
+        this.setState({Benign_incorrect : 0})
+        this.setState({password_correct : 0})
+        this.setState({password_incorrect : 0})
+        this.setState({xss_correct :0})
+        this.setState({xss_incorrect : 0})
+        this.setState({scanning_correct : 0})
+        this.setState({scanning_incorrect : 0})
+        this.setState({injection_correct : 0})
+        this.setState({injection_incorrect : 0})
+        this.setState({dos_correct :0})
+        this.setState({dos_Incorrect : 0})
+        this.setState({mitm_correct : 0})
+        this.setState({mitm_incorrect : 0})
+        this.setState({ransomware_correct : 0})
+        this.setState({ransomware_incorrect : 0})
+
+
+
+
+      console.log("Saving data response : ", response.data)
+
+
+      })
+      .catch(() => {
+        console.log("internal Server Error");
+      });
+
+    // console.log("Prediction Data: ",data);
+    }, 1000)
+
+    
+
+    // console.log(res)
   }
 
   async postData(data) {
@@ -399,47 +636,377 @@ class ProfessorMMA extends React.Component {
       // `headers` are custom headers to be sent
       headers: { form: "form" },
     })
-      .then((response) => {
-        let fighterA = '';
-        let fighterB = '';
-        predictData = this.state.simulationData;
+       .then((response) => {
+
+        //result
+        let binary_prediction = [];
+        let rand_prediction =[];
+        let skorch_nn_prediction =[];
 
 
-    // this.setState({graph:[]});
-    // this.setState({simulationDatsa:[]});
+        // this.setState({graph:[]});
+        // this.setState({simulationDatsa:[]});
+        // this.props.setStats(data)
+        // this.props.setStats(data);
+        // this.props.stats.push(data)
+        // console.log("tetsing 2nd ", this.props.stats)
 
 
 
-        console.log("Result",response.data);
-        console.log("File has been sent to the server ");
+        console.log("ML predictions",response.data);
         this.setState({ Response: true });
-        this.setState({ Response1: true });
+        // this.setState({ Response1: true });
 
-        let main_predicition = response.data.MAIN_BINARY;
+        let main_prediction = Number(response.data.MAIN_BINARY);
         let random_forest_prediction = response.data.RAND_PREDICTIOB;
         let skorch_prediction = response.data.SKORCH_PREDICTION;
 
+        // console.log("20 error", random_forest_prediction,skorch_prediction, response.data)
 
-        if (random_forest_prediction !== "Draw" && skorch_prediction !== "Draw") {
-          fighterA = Number(random_forest_prediction);
-          fighterB = Number(skorch_prediction);
+        // #0 injection     468539
+        // #1 ddos          326345
+        // #2 Benign        270279 free from virus
+        // #3 password      156299
+        // #4 xss            99944
+        // #5 scanning       21467
+        // #6 Dos            17717
+        // #7 backdoor       17247
+        // #8 mitm            1295
+        // #9 ransomware       142
 
-          if (fighterA > fighterB) {
-            this.setState({ favWin: true });
-            this.setState({ undWin: false });
-          } else {
-            this.setState({ undWin: true });
-            this.setState({ favWin: false });
-          }
-        } else {
-          this.setState({ draw: true });
+        switch(random_forest_prediction) {
+          case "0":
+            random_forest_prediction = "injection";
+            break;
+          case "1":
+            random_forest_prediction = "ddos";
+            break;
+          case "2":
+            random_forest_prediction = "Benign";
+            break;
+          case "3":
+            random_forest_prediction = "password";
+            break;
+          case "4":
+            random_forest_prediction = "xss";
+            break;
+          case "5":
+            random_forest_prediction = "scanning";
+          break;
+            case "6":
+              random_forest_prediction = "injection";
+            break;
+          case "7":
+            random_forest_prediction = "Dos";
+            break;
+          case "8":
+            random_forest_prediction = "mitm";
+            break;
+          case "9":
+            random_forest_prediction = "ransomware";
+          break;
         }
 
-        this.setState({ Favourite: fighterA });
-        this.setState({ UnderDog: fighterB });
+        switch(skorch_prediction) {
+          case "0":
+            skorch_prediction = "injection";
+            break;
+          case "1":
+            skorch_prediction = "ddos";
+            break;
+          case "2":
+            skorch_prediction = "Benign";
+            break;
+          case "3":
+            skorch_prediction = "password";
+            break;
+          case "4":
+            skorch_prediction = "xss";
+            break;
+          case "5":
+            skorch_prediction = "scanning";
+          break;
+            case "6":
+              skorch_prediction = "injection";
+            break;
+          case "7":
+            skorch_prediction = "Dos";
+            break;
+          case "8":
+            skorch_prediction = "mitm";
+            break;
+          case "9":
+            skorch_prediction = "ransomware";
+            break;   
+        }
+
+
+
+        //setting for graphs 
+
+        if(this.state.index != this.state.selected_quanltity)
+        {
+          // let rand_prediction =[];
+          // let skorch_nn_prediction =[];
+    
+          
+          console.log("number of result back", this.state.index+1);
+          binary_prediction.push(main_prediction);
+          rand_prediction.push(random_forest_prediction);
+          skorch_nn_prediction.push(skorch_prediction);
+
+          console.log("main binary prediciton", binary_prediction);
+
+
+          this.setState(prevState => ({
+            Binary_prediction: [...prevState.Binary_prediction, binary_prediction[0]]
+          }))
+          this.setState(prevState => ({
+            Random_prediction: [...prevState.Random_prediction, rand_prediction[0]]
+          }))
+
+          // this.state.skorch_total_wrong
+          this.setState(prevState => ({
+            skorch_prediction: [...prevState.skorch_prediction, skorch_nn_prediction[0]]
+          }))
+
+
+          console.log("SKorch prediction", this.state.skorch_prediction);
+          console.log("Rand prediction", this.state.Random_prediction);
+
+
+
+
+
+          this.setState({index:this.state.index+1});
+        }
+        
+        if(this.state.index == this.state.selected_quanltity)
+
+        {
+          
+
+          console.log("Binary Actual", this.state.Binary_result,this.state.Binary_prediction);
+          console.log("Binary type A", typeof( this.state.Binary_result[0]));
+
+
+      
+          console.log("SKorch Actual",this.state.type_result, this.state.skorch_prediction);
+          console.log("Random Actual",this.state.type_result, this.state.Random_prediction);
+
+
+
+          for(let i =0; i < this.state.selected_quanltity;  i++)
+          {
+
+
+            if (this.state.Binary_result[i] == this.state.Binary_prediction[i] && this.state.Binary_prediction[i] !== 'undefined')
+            {
+               
+
+                this.setState({
+                    Binary_total_correct : this.state.Binary_total_correct +1
+                });
+
+                // Sets Color to Gree for the right Prediction
+                this.setState({favWin:true});
+                this.setState({undWin:false});
+
+
+              
+
+            }
+
+             else if (this.state.Binary_result[i] != this.state.Binary_prediction[i] && this.state.Binary_result[i]  !== 'undefined') 
+            {
+
+                this.setState({
+                  Binary_total_wrong : this.state.Binary_total_wrong +1
+                });
+
+                // Sets Color to red for wrong prediciotn
+                this.setState({undWin:true});
+                this.setState({favWin:false});
+
+
+
+
+              }
+
+ 
+
+
+            if (this.state.type_result[i] == this.state.Random_prediction[i] && this.state.Random_prediction[i]  !== 'undefined')
+            {
+                this.setState({
+                  Random_total_correct : this.state.Random_total_correct +1
+                });
+            }
+            else  if (this.state.type_result[i] != this.state.Random_prediction[i] &&  this.state.Random_prediction[i] !== 'undefined')
+            {
+                this.setState({
+                  Random_total_wrong : this.state.Random_total_wrong +1
+                });
+            }
+
+
+             //skorch
+              
+             if (this.state.type_result[i] == this.state.skorch_prediction[i] && this.state.skorch_prediction[i] !== 'undefined')
+             {
+                 this.setState({
+                   skorch_total_correct : this.state.skorch_total_correct +1
+                 });
+             }
+              else if (this.state.type_result[i] != this.state.skorch_prediction[i] && this.state.skorch_prediction[i]  !== 'undefined')
+             {
+
+                 this.setState({
+                   skorch_total_wrong : this.state.skorch_total_wrong +1
+                 });
+             }
+
+
+             switch(this.state.type_result[i]) {
+              case "injection":
+                    if(this.state.skorch_prediction[i] == this.state.type_result[i] ||this.state.Random_prediction[i] == this.state.type_result[i]) 
+                    {
+                        this.setState({injection_correct : this.state.injection_correct+1})
+                    }
+                    else
+                    {
+                      this.setState({injection_incorrectcorrect : this.state.injection_incorrect+1})
+                    }
+                break;
+              case "ddos":
+                    if(this.state.skorch_prediction[i] == this.state.type_result[i] || this.state.Random_prediction[i] == this.state.type_result[i])
+                    {
+                        this.setState({ddos_correct : this.state.ddos_correct+1})
+                    }
+                    else
+                    {
+                      this.setState({ddos_incorrect : this.state.ddos_incorrect+1})
+                    }
+                    break;
+              case "Benign":
+                    if(this.state.skorch_prediction[i] == this.state.type_result[i] || this.state.Random_prediction[i] == this.state.type_result[i])
+                    {
+                        this.setState({Benign_correct : this.state.Benign_correct+1})
+                    }
+                    else
+                    {
+                      this.setState({Benign_incorrect : this.state.Benign_incorrect+1})
+                    }
+                break;
+              case "password":
+                    if(this.state.skorch_prediction[i] == this.state.type_result[i] || this.state.Random_prediction[i] == this.state.type_result[i])
+                    {
+                        this.setState({password_correct : this.state.password_correct+1})
+                    }
+                    else
+                    {
+                      this.setState({password_incorrect : this.state.password_incorrect+1})
+                    }
+                break;
+              case "xss":
+                    if(this.state.skorch_prediction[i] == this.state.type_result[i] || this.state.Random_prediction[i] == this.state.type_result[i])
+                    {
+                        this.setState({xss_correct : this.state.xss_incorrect+1})
+                    }
+                    else
+                    {
+                      this.setState({xss_incorrect : this.state.xss_incorrect+1})
+                    }
+               break;
+              case "scanning":
+                   if(this.state.skorch_prediction[i] == this.state.type_result[i] || this.state.Random_prediction[i] == this.state.type_result[i])
+                    {
+                        this.setState({scanning_correct : this.state.scanning_correct+1})
+                    }
+                    else
+                    {
+                      this.setState({scanning_incorrect : this.state.scanning_correct+1})
+                    }
+              break;
+                case "injection":
+                  if(this.state.skorch_prediction[i] == this.state.type_result[i] || this.state.Random_prediction[i] == this.state.type_result[i])
+                  {
+                      this.setState({injection_correct : this.state.injection_incorrect+1})
+                  }
+                  else
+                  {
+                    this.setState({injection_incorrect : this.state.injection_incorrect+1})
+                  }
+                break;
+              case "Dos":
+                if(this.state.skorch_prediction[i] == this.state.type_result[i] || this.state.Random_prediction[i] == this.state.type_result[i])
+                  {
+                      this.setState({dos_correct : this.state.dos_correct+1})
+                  }
+                  else
+                  {
+                    this.setState({dos_Incorrect : this.state.dos_Incorrect+1})
+                  }
+                break;
+              case "mitm":
+                if(this.state.skorch_prediction[i] == this.state.type_result[i] || this.state.Random_prediction[i] == this.state.type_result[i])
+                {
+                    this.setState({mitm_correct : this.state.mitm_correct+1})
+                }
+                else
+                {
+                  this.setState({mitm_incorrect : this.state.mitm_incorrect+1})
+                }                break;
+              case "ransomware":
+                if(this.state.skorch_prediction[i] == this.state.type_result[i] || this.state.Random_prediction[i] == this.state.type_result[i])
+                  {
+                      this.setState({ransomware_correct : this.state.ransomware_correct+1})
+                  }
+                  else
+                  {
+                    this.setState({ransomware_incorrect : this.state.ransomware_incorrect+1})
+                  }
+                break;   
+            }
+
+          }
+
+          this.setState({draw:true})
+
+
+
+
+          console.log("Resetting")
+          this.setState({
+            Binary_result: []
+          })
+      
+          this.setState({
+            type_result: []
+          })
+          this.setState({
+            Binary_prediction: []
+          })
+      
+          this.setState({
+            skorch_prediction: []
+          })
+
+          this.setState({
+            Random_prediction: []
+          })
+      
+
+
+
+
+          this.setState({index:0});
+        }
+
+
       })
-      .catch(() => {
-        console.log("internal Server Error");
+      .catch((e) => {
+        console.log("PostData internal Server Error",e);
       });
 
     console.log("Prediction Data: ",data);
@@ -546,13 +1113,8 @@ class ProfessorMMA extends React.Component {
                   <Card
                     elevation={6}
                     className={
-                      this.state.Response
-                        ? this.state.draw
-                          ? classes.draw
-                          : this.state.favWin
-                          ? classes.Win
-                          : classes.Loss
-                        : classes.root
+                      // classes.draw : classes.Win : classes.Loss : classes.root
+                       this.state.favWin ?  classes.Win: this.state.undWin ? classes.Loss ? this.state.draw : classes.draw : classes.root
                     }
                   >
                     <CardActionArea>
@@ -631,10 +1193,10 @@ class ProfessorMMA extends React.Component {
                             size="large"
                             variant="contained"
                             color="primary"
-                            onClick={this.postData}
+                            onClick={this.saveData}
                             component="span"
                           >
-                            Simulate
+                            Save Data
                           </Button>
                           <Button
                             size="large"

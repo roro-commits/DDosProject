@@ -3596,6 +3596,11 @@
   "resolved" "https://registry.npmjs.org/clean-stack/-/clean-stack-2.2.0.tgz"
   "version" "2.2.0"
 
+"clear-cache@^1.0.1":
+  "integrity" "sha512-3Cr59jFcH3ENES1XDx0IL05C/LI02JFCn/pLt15wK3c4MOXnwo5XT+s7vTiPqvEsAgyyjeICilTQf4XdCgWaAQ=="
+  "resolved" "https://registry.npmjs.org/clear-cache/-/clear-cache-1.0.1.tgz"
+  "version" "1.0.1"
+
 "cliui@^5.0.0":
   "integrity" "sha512-PYeGSEmmHM6zvoef2w8TPzlrnNpXIjTipYK780YswmIP9vjxmd6Y2a3CB2Ks6/AU8NHjZugXvo8w3oWM2qnwXA=="
   "resolved" "https://registry.npmjs.org/cliui/-/cliui-5.0.0.tgz"

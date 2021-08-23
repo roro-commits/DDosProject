@@ -14,6 +14,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box'
+import {clearCache} from "clear-cache"
+
 // import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
 import {
   BarChart,
@@ -120,7 +122,7 @@ constructor(props){
       DOB:[],
       SApM:[],
       SLpM:[],
-      REACH:[],
+      REACH:this.props.stats[3],
       STANCE:[],
       WEIGHT:[],
       strikeAccuracy:[],
@@ -138,6 +140,11 @@ constructor(props){
       favWin:false,
       undWin:false,
       draw:false,
+      // new 
+      subject :["hello","dello"],
+      Correct :[0,0,90,0,0,0,0,0,0,0],
+      Incorrect :[1],
+      fullMark :[],
       chart:[],
       charttwo:[],
       radarB:false,
@@ -147,69 +154,55 @@ constructor(props){
     }
     this.getFighterA = this.getFighterA.bind(this);
 
+
   }
 
 
+
+
   async getOptions(){
-    const res = await axios.get('/static/fighterDataset2.json')
+    const res = await axios.get('/static/satistics.json')
+    // const res = await axios.get('http://127.0.0.1:5000/static/satistics.json')
+
     const data = res.data
-    const nameData =[]
-    const heightData =[]
-    const StrikeAcc =[]
-    const DOB =[]
-    const SApM =[]
-    const SLpM =[]
-    const REACH =[]
-    const STANCE =[]
-    const WEIGHT =[]
-    const strDef =[]
-    const tdAcc =[]
-    const subAvg =[]
-    const tdDef =[]
-    const tdAvg =[]
+    const subject =[]
+    const Incorrect =[]
+    const Correct =[]
+    const fullMark =[]
+
+    console.log("The Data", data)
 
 
-    for(let i =0; i< 6000 ;i++){
-      // console.log(FighterData.Name[i])
-      if (FighterData.Name[i] !== undefined){
-        nameData.push({ "Name" : FighterData.Name[i]})
-        heightData.push({"Height": FighterData.HEIGHT[i]})
-        StrikeAcc.push({"StrAcc": FighterData["Str. Acc.."][i]})
-        DOB.push({"DOB":FighterData.DOB[i]})
-        SApM.push({"SApM":FighterData.SApM[i]})
-        SLpM.push({"SLpM":FighterData.SLpM[i]})
-        REACH.push({"REACH":FighterData.REACH[i]})
-        STANCE.push({"STANCE":FighterData.STANCE[i]})
-        WEIGHT.push({"WEIGHT":FighterData.WEIGHT[i]})
-        strDef.push({"strDef":FighterData["Str. Def"][i]})
-        tdAcc.push({"tdAcc":FighterData["TD Acc"][i]})
-        subAvg.push({"subAvg":FighterData["Sub. Avg"][i]})
-        tdDef.push({"tdDef":FighterData["TD Def."][i]})
-        tdAvg.push({"tdAvg":FighterData["TD Avg"][i]})
+    for(let i =0; i< res.data.length ;i++){
+      // console.log("Data data",data.subject)
 
+      console.log(data[i]["subject"])
+      console.log()
+      
+      if (data[i]["subject"] !== undefined) {
 
+        subject.push(data[i]["subject"]);
+        Incorrect.push(data[i]["Incorrect"] );
+        Correct.push(Number(data[i]["Correct"]));
+        fullMark.push(data[i]["fullMark"]);
       }
+
+
     }
 
-    this.setState({selectOptionsNames: nameData})
-    this.setState({height: heightData})
-    this.setState({strikeAccuracy: StrikeAcc})
-    this.setState({DOB: DOB})
-    this.setState({SLpM: SLpM})
-    this.setState({REACH: REACH})
-    this.setState({STANCE: STANCE})
-    this.setState({WEIGHT: WEIGHT})
-    this.setState({strDef: strDef})
-    this.setState({tdAcc: tdAcc})
-    this.setState({subAvg: subAvg})
-    this.setState({tdDef: tdDef})
-    this.setState({tdAvg: tdAvg})
-    this.setState({SApM: SApM})
+
+      this.setState({ subject: subject});
+      this.setState({ Incorrect: Incorrect});
+      this.setState({ Correct: Correct });
+      this.setState({ fullMark: fullMark });
+   
 
   }
     componentDidMount(){
       this.getOptions()
   }
+
+
 
 
 
@@ -332,127 +325,107 @@ constructor(props){
      // const GridRow = (props) => <Grid container direction ='row'{...props} />
      // const Item = (props) => <Grid item {...props} />
 
+    //  const data = res.data
+    //  const subject =[]
+    //  const Incorrect =[]
+    //  const Correct =[]
+    //  const fullMark =[]
+ 
 
   render(){
     const { classes } = this.props;
     const bull = <span className={classes.bullet}>•</span>;
+// data[i]["Correct"]
+    console.log("log testing",this.state.Correct)
+    console.log("log testing",this.state.subject)
+
+
     const data = [
   {
-    subject: 'HEIGHT',
-    A: this.state.chart[0],
-    B: this.state.charttwo[0],
+    subject: this.state.subject[0],
+    'Correct': this.state.Correct[0],
+    'InCorrect': this.state.Incorrect[0],
     fullMark: 20,
   },
 
   {
-    subject: 'REACH',
-    A: this.state.chart[1],
-    B: this.state.charttwo[1],
+    subject: this.state.subject[1],
+    'Correct': this.state.Correct[1],
+    'InCorrect': this.state.Incorrect[1],
     fullMark: 10,
   },
   {
-    subject: 'Strike Landed Per Min',
-    A: this.state.chart[2],
-    B: this.state.charttwo[2],
-    fullMark: 10,
+    subject: this.state.subject[2],
+    'Correct': this.state.Correct[2],
+    'InCorrect': this.state.Incorrect[2],
+    fullMark: 20,
   },
   {
-    subject: 'Strike Acc',
-    A: this.state.chart[3],
-    B: this.state.charttwo[3],
-    fullMark: 10,
+    subject: this.state.subject[3],
+    'Correct': this.state.Correct[3],
+    'InCorrect': this.state.Incorrect[3],
+    fullMark: 20,
   },
   {
-    subject: 'Strike Absorbed Per Min',
-    A: this.state.chart[4],
-    B: this.state.charttwo[4],
-    fullMark: 10,
+    subject: this.state.subject[4],
+    'Correct': this.state.Correct[4],
+    'InCorrect': this.state.Incorrect[4],
+    fullMark: 20,
   },
  {
-    subject: 'Strike Def',
-    A: this.state.chart[5],
-    B: this.state.charttwo[5],
-    fullMark: 10,
+    subject: this.state.subject[5],
+    'Correct': this.state.Correct[5],
+    'InCorrect': this.state.Incorrect[5],
+    fullMark: 20,
   },
  {
-    subject: 'Takedown Avg',
-    A: this.state.chart[6],
-    B: this.state.charttwo[6],
-    fullMark: 10,
+    subject: this.state.subject[6],
+    'Correct': this.state.Correct[6],
+    'InCorrect': this.state.Incorrect[6],
+    fullMark: 20,
   }, {
-    subject: 'Takedown Acc',
-    A: this.state.chart[7],
-    B: this.state.charttwo[7],
-    fullMark: 10,
+    subject: this.state.subject[7],
+    'Correct': this.state.Correct[7],
+    'InCorrect': this.state.Incorrect[7],
+    fullMark: 20,
   }, {
-    subject: 'Takedown Def',
-    A: this.state.chart[8],
-    B: this.state.charttwo[8],
-    fullMark: 10,
+    subject: this.state.subject[8],
+    'Correct': this.state.Correct[8],
+    'InCorrect': this.state.Incorrect[8],
+    fullMark: 20,
   },
-  //       {
-  //   subject: 'Submission Avg',
-  //   A: this.state.chart[8],
-  //   B: 0,
-  //   fullMark: 10,
-  // },
+  {
+    subject: this.state.subject[9],
+    'Correct': this.state.Correct[9],
+    'InCorrect': this.state.Incorrect[9],
+    fullMark: 20,
+  },
+  {
+    subject: this.state.subject[10],
+    'Correct': this.state.Correct[10],
+    'InCorrect': this.state.Incorrect[10],
+    fullMark: 20,
+  },
+  {
+    subject: this.state.subject[11],
+    'Correct': this.state.Correct[11],
+    'InCorrect': this.state.Incorrect[11],
+    fullMark: 20,
+  },
+  {
+    subject: this.state.subject[12],
+    'Correct': this.state.Correct[12],
+    'InCorrect': this.state.Incorrect[12],
+    fullMark: 20,
+  },
 
 ];
 
     return (
 
     <React.Fragment>
-       <Box p={5}>
-           <GridRow>
-               <GridRow  >
-
-                      <GridRow spacing={10}>
-
-                                <GridRow xs={6} justify="flex-end" alignItems="center">
-                                    <Item styles={{marginLeft:2000}}>
-
-
-                                      <Box p={1.5}>
-                                          <Paper  styles={classes.paper}>
-
-                                             <Autocomplete
-                                              id="FighterA"
-                                              options={this.state.selectOptionsNames}
-                                              getOptionLabel={(option) => option.Name}
-                                              style={{ width: 500 }}
-                                              onChange={(event, value) => this.getFighterA(value)} // sends Index of selected Item Fighter A
-                                              renderInput={(params ) => <TextField {...params}  label="Fighters" variant="outlined" />}
-                                            />
-
-                                        </Paper>
-                                      </Box>
-                                    </Item>
-                                </GridRow>
-
-
-                                <GridRow xs={6}  justify="flex-start" alignItems="center" >
-                                    <Item >
-
-
-                                          <Box p={1.5}>
-                                              <Paper  styles={classes.paper}>
-
-                                                 <Autocomplete
-                                                  id="FighterB"
-                                                  options={this.state.selectOptionsNames}
-                                                  getOptionLabel={(option) => option.Name}
-                                                  style={{ width: 500 }}
-                                                  onChange={(event, value) => this.getFighterB(value)} // sends Index of selected Item Fighter A
-                                                  renderInput={(params ) => <TextField {...params}  label="Fighters" variant="outlined" />}
-                                                />
-
-                                            </Paper>
-                                          </Box>
-                                    </Item>
-                                </GridRow>
-                      </GridRow>
-                </GridRow>
-           </GridRow>
+       <Box p={0}>
+        
 
            <GridCol>
 
@@ -477,8 +450,8 @@ constructor(props){
                                                   <PolarGrid />
                                                   <PolarAngleAxis dataKey="subject" />
                                                   <PolarRadiusAxis angle={40} domain={[0, 10]} />
-                                                  <Radar name={this.state.FighterA[0]} dataKey="A" stroke="#fc9992" fill="#fc9992" fillOpacity={0.6} />
-                                                  <Radar  name={this.state.FighterB[0]} dataKey="B" stroke="#a3eef0" fill="#a3eef0" fillOpacity={0.6} />
+                                                  <Radar name={this.state.FighterA[0]} dataKey='Correct' stroke="#fc9992" fill="#fc9992" fillOpacity={0.6} />
+                                                  <Radar  name={this.state.FighterB[0]} dataKey='InCorrect' stroke="#a3eef0" fill="#a3eef0" fillOpacity={0.6} />
                                                   <Legend />
                                                 </RadarChart>
                                             </ResponsiveContainer>
@@ -510,25 +483,25 @@ constructor(props){
                                         <Item xs={12}>
                                             <ResponsiveContainer width={1200} height={500}>
                                                 <BarChart
-                                                  width={500}
+                                                  width={900}
                                                   height={300}
                                                   data={data}
                                                   stackOffset="sign"
                                                   margin={{
                                                     top: 5,
-                                                    right: 30,
-                                                    left: 20,
+                                                    right: 5,
+                                                    left: 5,
                                                     bottom: 5,
                                                   }}
                                                 >
-                                                  <CartesianGrid strokeDasharray="3 3" />
+                                                  <CartesianGrid strokeDasharray="1 1" />
                                                   <XAxis dataKey="subject" />
                                                   <YAxis />
                                                   <Tooltip />
                                                   <Legend />
                                                   <ReferenceLine y={0} stroke="#000" />
-                                                   <Bar dataKey="A" stackId="a" fill="#8884d8" />
-                                                   <Bar dataKey="B" stackId="a" fill="#82ca9d" />
+                                                   <Bar dataKey="Correct" stackId="a" fill="#8884d8" />
+                                                   <Bar dataKey='InCorrect' stackId="a" fill="#82ca9d" />
                                                 </BarChart>
                                             </ResponsiveContainer>
                                         </Item>

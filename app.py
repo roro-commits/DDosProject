@@ -78,6 +78,61 @@ def not_found(e):
   return app.send_static_file('index.html')
 
 
+@app.after_request
+def add_header(response):    
+  response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
+  if ('Cache-Control' not in response.headers):
+    response.headers['Cache-Control'] = 'public, max-age=0'
+  return response
+
+
+
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    print("ccheking2", flush=True)
+    return send_from_directory(app.static_folder, "index.html")
+
+# @app.route("/static/csvjson.json", methods=["GET"])
+# @cross_origin(supports_credentials=True)
+# def get_example():
+#     """GET in server"""
+#     response = jsonify(message="Simple server is running")
+
+#     # Enable Access-Control-Allow-Origin
+#     response.headers.add("Access-Control-Allow-Origin", "*")
+#     return response
+
+# catching React Router urls 
+@app.errorhandler(404)   
+def not_found(e):   
+  return app.send_static_file('index.html')
+
+#new
+@app.route('/api/saveData', methods=['GET','POST'])
+@cross_origin(supports_credentials=True)
+# @app.after_request
+def saveData():
+    
+    if request.method == 'POST':
+        if request.data:
+            data = request.data.decode('UTF-8')
+            json = request.get_json()
+            # print(request.data)
+            # print(len(request.data))
+            # print("#############################data##################", data)
+            print("#############################json##################", json)
+
+           
+            # f = open(r'C:\Users\captain-blacc\Documents\FYP-Project\DDosProject\build\static\satistics.json',"w")
+            f = open('/app/build/static/satistics.json',"w")
+            f.write(str(data))
+            f.close()
+
+
+
+    return("data saved")
+
+
 @app.route('/api/react_api', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def react_api():
@@ -118,7 +173,7 @@ def react_api():
             #[5 rows x 13 columns]
             #0 injection     468539
             #1 ddos          326345
-            #2 Benign        270279
+            #2 Benign        270279 free from virus
             #3 password      156299
             #4 xss            99944
             #5 scanning       21467

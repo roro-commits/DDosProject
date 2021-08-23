@@ -156,7 +156,10 @@ function Header(props) {
     case "/chart":
       if (props.value !==2){
         props.setValue(2)
+
+          clearCacheData();
       }
+
     break;
     case "/contact":
         if (props.value !==3){
