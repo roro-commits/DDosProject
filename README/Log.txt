@@ -32,13 +32,24 @@ such as saved models files of Machine Learning (ML) being too big for git commit
 used Reservoir sampling alogrithmn to sample my dataset
 successfully deployed the Random Forest Model
 
-week 5-6  16/08/21
+week 5-6  04/08/21 - 16/08/21 
 I spent most of this time on hyperparamter tuning as result I didnt not have much change in code to commit
 and also work load from my full time job and other repeat modules & has dwindle the time capital I could use to commit to the project.
 So I have reduced the plan work for my project I will not be going with all 3 ML models. in order to wrap up then project in time. 
 
 for the Skorch Nueral network although the training and testing accuracy is 70%. The human readable result (interpretation) does not make sense. If I cant make sense of it in the coming days I will be dropping the model
 
+
+week 6-7  16/08/21 - 27/08/21
+I spent most of this time simply integrating the machine learning with my Flask back end Deploying the  full project to heroku 
+and integrating the full funtionalities of both front and back end. Things I managed acomplished inlcudes
+1) deploying the Binary Neural network along with random forest and multi-class Nueral Network.
+2) Write a program to calulate the number of correct & incorrect predictions/ classification 
+3) fixed skorch neural nework result interpretation problem 
+4) Wrote a program to graph the result 
+5) Came up with  a simpler solution to graphing the result data by storing Data to Json this finxed issues that comes with higher order component  but also came with its own issues. 
+
+Due to limited time I had for this project I will conclude the project done and spend the rest of my time on report and presenstation
 
 
 
